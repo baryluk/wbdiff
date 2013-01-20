@@ -1,0 +1,35 @@
+wbdiff - diff tools
+
+Diffing tool with few sophisticated features.
+
+
+Features:
+  - color output
+  - statistics
+  - detection of moved code bloks
+  - shortening long blocks
+  - normalization of lines
+  - ability to ignore certain types changes
+  - fuzzy matching
+  - custom parameters
+  - slowness
+
+TODO:
+  - option parsing
+  - adaptative moved blocks and fuzzy matching
+  - splited lines detection
+  - automatic handing of compressed files
+  - recurisve diffing of multiple files/directories
+  - speed optimizations
+  - unittests
+
+
+This tool was created on one evening, when I was uterly annoyed by lack
+of good diff tools. I checked about 15 of them, and actually Microsoft's
+free version WinDiff was best (running in WINE)! However, I wanted
+simple tool, with ability to work from command line nativly on Linux,
+and more possible customizations. Then in few hours I created wbdiff.py :)
+Works perfectly for me, producing optimal diffs.
+
+
+Copyright: 2013, Witold Baryluk
