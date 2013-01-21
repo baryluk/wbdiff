@@ -23,7 +23,7 @@ Removals from left file, moves and additions to right file:
 Diff statistics:
 	Initial context length used: 3
 	Number of matching (extended) blocks: 2
-	Number of lines in matching (extended) blocks: 14 14
+	Number of lines in matching (extended) blocks: 14
 	Number of lines removed from left file: 0
 	Number of new lines added to right file: 0
 	Weighted cost (blocks + removed + added): 1

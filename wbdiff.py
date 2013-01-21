@@ -374,7 +374,8 @@ if args.summary_stats:
   print ansi.WARNING+"Diff statistics:"
   print "\tInitial context length used:", args.initial_context_matching
   print "\tNumber of matching (extended) blocks:", len(blocks_right)
-  print "\tNumber of lines in matching (extended) blocks:", left_right_matched, sum(map(lambda x: x[1], blocks_right.itervalues()))
+  # sum(map(lambda x: x[1], blocks_right.itervalues()))
+  print "\tNumber of lines in matching (extended) blocks:", left_right_matched
   print "\tNumber of lines removed from left file:", left_removed
   print "\tNumber of new lines added to right file:", right_added
   print ("\tWeighted cost (blocks + removed + added): %s"+ansi.ENDC) % (len(blocks_right)-1 + left_removed + right_added,)
