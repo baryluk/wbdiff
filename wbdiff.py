@@ -94,6 +94,13 @@ parser.add_argument('--shorten-long-matches', type=int,
 parser.add_argument('--use-default-replacments',
                     dest='use_default_replacments', action='store_true',
                     help='apply default replacments rules from wbdiff on input files')
+parser.add_argument('--read-compressed-files', action='store_true',
+                    default=True,
+                    dest='read_compressed_files',
+                    help='if input files are compressed (like .gz, .bz2), decompress prior to performing actuall diff (enabled by default)')
+parser.add_argument('--no-read-compressed-files', action='store_false',
+                    dest='read_compressed_files',
+                    help='do not attempt to decompress compressed files')
 
 args = parser.parse_args()
 
@@ -169,9 +176,26 @@ def similar(a, b, threshold):
   return s > threshold
 
 leftfilename = args.files[0]
-left = file(leftfilename).readlines()
 rightfilename = args.files[1]
-right = file(rightfilename).readlines()
+
+file_reader1 = file
+file_reader2 = file
+if args.read_compressed_files:
+  if leftfilename.endswith(".gz"):
+    import gzip
+    file_reader1 = gzip.GzipFile
+  if rightfilename.endswith(".gz"):
+    import gzip
+    file_reader2 = gzip.GzipFile
+  if leftfilename.endswith(".bz2"):
+    import bzip2
+    file_reader1 = gzip.BZ2File
+  if rightfilename.endswith(".bz2"):
+    import bzip2
+    file_reader2 = gzip.BZ2File
+
+left = file_reader1(leftfilename).readlines()
+right = file_reader2(rightfilename).readlines()
 
 import re
 

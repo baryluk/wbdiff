@@ -7,17 +7,18 @@ Features:
   - detection of moved code bloks
   - shortening long blocks
   - color output
-  - statistics
+  - statistics at the end of diff output
+  - support for reading compressed files transparently (.gz, .bz2)
+  - ability to ignore certain types of changes
   - normalization of lines
-  - ability to ignore certain types changes
-  - fuzzy matching
-  - custom parameters
+  - diff algorithm and output tunable using command line options
+  - tested by more than dozen of unittests
   - slowness
 
 TODO:
+  - good fuzzy matching
   - adaptative moved blocks and fuzzy matching
   - splited/merged lines detection
-  - automatic handing of compressed files
   - recurisve diffing of multiple files/directories
   - speed optimizations
 
