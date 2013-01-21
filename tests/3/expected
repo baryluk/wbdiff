@@ -1,30 +1,30 @@
-[91mRemovals[0m from left file, [94mmoves[0m and [92madditions[0m to right file:
-[91m--- tests/3/left[0m
-[92m+++ tests/3/right[0m
-   ->  1 [92m+ x[0m
-   ->  2 [92m+ y[0m
-   ->  3 [92m+ z[0m
+Removals from left file, moves and additions to right file:
+--- tests/3/left
++++ tests/3/right
+   ->  1 + x
+   ->  2 + y
+   ->  3 + z
 ---------\ l0001-l0015 -> r0004-r0018  (14 lines)
-  1->  4 [94m| a[0m
-  2->  5 [94m| b[0m
-  3->  6 [94m| c[0m
-  4->  7 [94m| d[0m
-  5->  8 [94m| e[0m
-  6->  9 [94m| f[0m
-  7-> 10 [94m| g[0m
-  8-> 11 [94m| h[0m
-  9-> 12 [94m| i[0m
- 10-> 13 [94m| j[0m
- 11-> 14 [94m| k[0m
- 12-> 15 [94m| l[0m
- 13-> 16 [94m| m[0m
- 14-> 17 [94m| n[0m
+  1->  4 | a
+  2->  5 | b
+  3->  6 | c
+  4->  7 | d
+  5->  8 | e
+  6->  9 | f
+  7-> 10 | g
+  8-> 11 | h
+  9-> 12 | i
+ 10-> 13 | j
+ 11-> 14 | k
+ 12-> 15 | l
+ 13-> 16 | m
+ 14-> 17 | n
 ---------/
 
-[93mDiff statistics:
-	Initial context length used: 5
+Diff statistics:
+	Initial context length used: 3
 	Number of matching (extended) blocks: 1
 	Number of lines in matching (extended) blocks: 14 14
 	Number of lines removed from left file: 0
 	Number of new lines added to right file: 3
-	Weighted cost (blocks + removed + added): 3[0m
+	Weighted cost (blocks + removed + added): 3

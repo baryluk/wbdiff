@@ -7,7 +7,7 @@ do
 		echo "SKIPPED"
 		continue
 	fi
-	./wbdiff.py "$t/left" "$t/right" > "$t/output"
+	./wbdiff.py --no-color "$t/left" "$t/right" > "$t/expected"
 	grep -v 'Initial context length used' "$t/expected" > "$t/expected.filtered"
 	grep -v 'Initial context length used' "$t/output" > "$t/output.filtered"
 	cmp "$t/output.filtered" "$t/expected.filtered"
