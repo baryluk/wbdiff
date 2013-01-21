@@ -1,13 +1,13 @@
-wbdiff - diff tools
+wbdiff - Advanced diff utility
 
-Diffing tool with few sophisticated features.
-
+Diffing tool with few sophisticated features, hopefully makeing
+developer's life easier.
 
 Features:
-  - color output
-  - statistics
   - detection of moved code bloks
   - shortening long blocks
+  - color output
+  - statistics
   - normalization of lines
   - ability to ignore certain types changes
   - fuzzy matching
@@ -17,11 +17,10 @@ Features:
 TODO:
   - option parsing
   - adaptative moved blocks and fuzzy matching
-  - splited lines detection
+  - splited/merged lines detection
   - automatic handing of compressed files
   - recurisve diffing of multiple files/directories
   - speed optimizations
-  - unittests
 
 
 This tool was created on one evening, when I was uterly annoyed by lack
