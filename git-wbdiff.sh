@@ -13,4 +13,4 @@ new_file=$5
 new_hex=$6
 new_mode=$7
 
-./wbdiff.py "$2" "$5"
+./wbdiff.py "${old_file}" "${new_file}"
