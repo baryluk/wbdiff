@@ -3,6 +3,10 @@
 for t in tests/*
 do
 	echo "Checking $t"
+	if ! [ -f "$t/expected" ]; then
+		echo "SKIPPED"
+		continue
+	fi
 	./wbdiff.py "$t/left" "$t/right" > "$t/output"
 	cmp "$t/output" "$t/expected"
 	O=$?
