@@ -1,0 +1,33 @@
+Removals from left file, moves and additions to right file:
+--- tests/13/left
++++ tests/13/right
+---------\ l0001-l0006 -> r0001-r0006  (5 lines)
+  1->  1 | a
+  2->  2 | b
+  3->  3 | c
+  4->  4 | d
+  5->  5 | e
+---------/
+  6->    - f
+  7->    - g
+---------\ l0008-l0012 -> r0006-r0010  (4 lines)
+  8->  6 | h
+  9->  7 | i
+ 10->  8 | j
+ 11->  9 | k
+---------/
+   -> 10 + A
+   -> 11 + B
+---------\ l0012-l0015 -> r0012-r0015  (3 lines)
+ 12-> 12 | l
+ 13-> 13 | m
+ 14-> 14 | n
+---------/
+
+Diff statistics:
+	Initial context length used: 3
+	Number of matching (extended) blocks: 3
+	Number of lines in matching (extended) blocks: 12
+	Number of lines removed from left file: 2
+	Number of new lines added to right file: 2
+	Weighted cost (blocks + removed + added): 6
