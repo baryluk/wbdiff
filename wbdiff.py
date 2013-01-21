@@ -61,17 +61,45 @@
 # I may think about creating GUI ala Meld, WinMerge, KDiff3 or Araxis Merge.
 # I will probably use GTK+ (version 3), so stay tuned.
 
+import argparse
 
-import sys
+parser = argparse.ArgumentParser(description='Displays difference between two files.')
+parser.add_argument('files', metavar='file', type=str, nargs=2,
+                    help='files to compare')
+parser.add_argument('--color', dest='color', action='store_true',
+                    default=True,
+                    help='use color output')
+parser.add_argument('--no-color', dest='color', action='store_false',
+                    help='disable color output')
+parser.add_argument('--line-prefixes', dest='line_prefixes', action='store_true',
+                    help='add l and r before line numbers')
+parser.add_argument('--summary-left', dest='summary_left', action='store_true',
+                    help='show separetly removed lines from left file')
+parser.add_argument('--summary-right', dest='summary_right', action='store_true',
+                    help='show separetly add lines to right file')
+parser.add_argument('--summary-stats', dest='summary_stats', action='store_true',
+                    default=True,
+                    help='show statistics of diff, after printing diff')
+parser.add_argument('--no-summary-stats', dest='summary_stats', action='store_false',
+                    default=False,
+                    help='oposite of --summary-stats')
+parser.add_argument('--initial-context-matchning', type=int,
+                    dest='initial_context_matching',
+                    default=3,
+                    help='tweek internal initial context matching length (in general range 3-11 should be sensible)')
+parser.add_argument('--shorten-long-matches', type=int,
+                    dest='shorten_long_matches',
+                    default=16,
+                    help='matched blocks longer than this will be shortened')
+parser.add_argument('--use-default-replacments',
+                    dest='use_default_replacments', action='store_true',
+                    help='apply default replacments rules from wbdiff on input files')
 
-colors = True
-line_prefixes = False
-summary_left = False
-summary_right = False
-summary_stats = True
-context_matching = 3   # 3..11 is sensible range
-shorten_long_matches = 16 # lenght of biggest block to show, above that,
+args = parser.parse_args()
+
+#16 # lenght of biggest block to show, above that,
                           # we will split block in half, and show ...
+
 
 # Usage of backreferences in "regular expressions" here,
 # is explicitly supported by wbdiff.
@@ -117,7 +145,7 @@ class _ansi:
     self.BOLD = ""
 
 ansi = _ansi()
-if not colors:
+if not args.color:
   ansi.disable()
 commonalize_diff_compact_delta = False
 
@@ -140,9 +168,9 @@ def similar(a, b, threshold):
   s = similarity(a, b)
   return s > threshold
 
-leftfilename = sys.argv[1]
+leftfilename = args.files[0]
 left = file(leftfilename).readlines()
-rightfilename = sys.argv[2]
+rightfilename = args.files[1]
 right = file(rightfilename).readlines()
 
 import re
@@ -153,20 +181,20 @@ def compile_replacments():
     compiled_replacments[n] = re.compile(from_to[0]) #, flags=re.IGNORECASE
   return compiled_replacments
 
-compiled_replacments = compile_replacments()
-
-def apply_replacements_line(line):
+def apply_replacements_line(compiled_replacments, line):
   for n, from_to in replacments.iteritems():
     line = compiled_replacments[n].sub(from_to[1], line)
   return line
 
-def apply_replacements(org):
+def apply_replacements(compiled_replacments, org):
   for i, line in iterseq(org):
-    org[i] = apply_replacements_line(line)
+    org[i] = apply_replacements_line(compiled_replacments, line)
   return org
 
-left = apply_replacements(left)
-right = apply_replacements(right)
+if args.use_default_replacments:
+  compiled_replacments = compile_replacments()
+  left = apply_replacements(compiled_replacments, left)
+  right = apply_replacements(compiled_replacments, right)
 
 # compute similarity matrix
 leftlen = len(left)
@@ -189,7 +217,7 @@ for i, a in iterseq(left):
     s = 1.0
     kk = 1
     # extend using context, but do no go beyond context_matching limit or last lines
-    for k in xrange(context_matching):
+    for k in xrange(args.initial_context_matching):
       if i+k<leftlen and j+k<rightlen:
         kk += 1
         if m[i+k][j+k] == 0.0:
@@ -212,7 +240,7 @@ matched_right = [False]*rightlen
 LL = ""
 RR = ""
 EE = ""
-if line_prefixes:
+if args.line_prefixes:
   LL = "l"
   RR = "r"
   EE = " "
@@ -282,13 +310,13 @@ for j, _b in iterseq(right):
     for kk in xrange(k):
       left_right_matched += 1
       c = "|"
-      if kk < shorten_long_matches/2 or kk>(k-shorten_long_matches/2):
+      if kk < args.shorten_long_matches/2 or kk>(k-args.shorten_long_matches/2):
         print (WL+"->"+WR+" "+blue("%s %s")) % (i+kk+1, j+kk+1, c, left[i+kk].rstrip())
       else:
         if was_shortened:
           continue
         print " "+"."*(W-1)+"->"+" "+"."*(W-1)+" "+blue(":")
-        print " (%d lines skiped)" % (k-shorten_long_matches+1,)
+        print " (%d lines skiped)" % (k-args.shorten_long_matches+1,)
         print " "+"."*(W-1)+"->"+" "+"."*(W-1)+" "+blue(":")
         was_shortened = True
     print "-"*(2*W+3) + "/"
@@ -301,7 +329,7 @@ for j, _b in iterseq(right):
     right_added += 1
     print (XX+"->"+WR+" "+green("+ %s")) % (j+1, _b.rstrip())
 
-if summary_left:
+if args.summary_left:
   print red("Removed")+" from left file:"
   for i, _a in iterseq(left):
     if not matched_left[i]:
@@ -309,7 +337,7 @@ if summary_left:
         print "-----"
       print (WL+"->"+XX+" "+red("- %s")) % (i+1, _a.rstrip())
 
-if summary_right:
+if args.summary_right:
   print green("Added")+" to right file"
   for j, _b in iterseq(right):
     if not matched_right[j]:
@@ -317,10 +345,10 @@ if summary_right:
         print "-----"
       print (XX+"->"+WR+" "+green("+ %s")) % (j+1, _b.rstrip())
 
-if summary_stats:
+if args.summary_stats:
   print
   print ansi.WARNING+"Diff statistics:"
-  print "\tInitial context length used:", context_matching
+  print "\tInitial context length used:", args.initial_context_matching
   print "\tNumber of matching (extended) blocks:", len(blocks_right)
   print "\tNumber of lines in matching (extended) blocks:", left_right_matched, sum(map(lambda x: x[1], blocks_right.itervalues()))
   print "\tNumber of lines removed from left file:", left_removed

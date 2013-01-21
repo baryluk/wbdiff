@@ -15,7 +15,6 @@ Features:
   - slowness
 
 TODO:
-  - option parsing
   - adaptative moved blocks and fuzzy matching
   - splited/merged lines detection
   - automatic handing of compressed files
