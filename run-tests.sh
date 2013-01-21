@@ -13,8 +13,8 @@ do
 	fi
 	# Uncomment if you want to update expected output files.
 	# BE ABSOLUTLY SURE THEY ARE CORRECT!
-	#./wbdiff.py --no-color "$t/left" "$t/right" > "$t/expected"
-	./wbdiff.py --no-color "$t/left" "$t/right" > "$t/output"
+	#./wbdiff.py --no-color -- "$t/left" "$t/right" > "$t/expected"
+	./wbdiff.py --no-color -- "$t/left" "$t/right" > "$t/output"
 	grep -v 'Initial context length used' "$t/expected" > "$t/expected.filtered"
 	grep -v 'Initial context length used' "$t/output" > "$t/output.filtered"
 	cmp "$t/output.filtered" "$t/expected.filtered"
