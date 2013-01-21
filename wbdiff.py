@@ -147,22 +147,26 @@ right = file(rightfilename).readlines()
 
 import re
 
-compiled = {}
-for n, from_to in replacments.iteritems():
-  compiled[n] = re.compile(from_to[0]) #, flags=re.IGNORECASE
-
-def repl_(line):
+def compile_replacments():
+  compiled_replacments = {}
   for n, from_to in replacments.iteritems():
-    line = compiled[n].sub(from_to[1], line)
+    compiled_replacments[n] = re.compile(from_to[0]) #, flags=re.IGNORECASE
+  return compiled_replacments
+
+compiled_replacments = compile_replacments()
+
+def apply_replacements_line(line):
+  for n, from_to in replacments.iteritems():
+    line = compiled_replacments[n].sub(from_to[1], line)
   return line
 
-def repl(org):
+def apply_replacements(org):
   for i, line in iterseq(org):
-    org[i] = repl_(line)
+    org[i] = apply_replacements_line(line)
   return org
 
-left = repl(left)
-right = repl(right)
+left = apply_replacements(left)
+right = apply_replacements(right)
 
 # compute similarity matrix
 leftlen = len(left)
