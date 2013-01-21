@@ -119,7 +119,6 @@ replacments = {
   "Log timestamp": (r"^(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) [012][0-9] [012][0-9]:[0-6][0-9]:[0-6][0-9] (\w+(?:\.\w+)*) kernel: \[ *[0-9]+\.[0-9]+\] ", r"\1  kernel:  ")
 }
 
-
 commonalize_diff_compact_delta = False
 
 import difflib
@@ -134,6 +133,9 @@ def diff(a, b):
 def similarity(a, b):
   return difflib.SequenceMatcher(None, a, b).ratio()
 
+def line_similarity(a, b):
+  return similarity(a, b)
+
 def similar(a, b, threshold):
   s = similarity(a, b)
   return s > threshold
@@ -146,11 +148,11 @@ right = file(rightfilename).readlines()
 import re
 
 compiled = {}
+for n, from_to in replacments.iteritems():
+  compiled[n] = re.compile(from_to[0]) #, flags=re.IGNORECASE
 
 def repl_(line):
   for n, from_to in replacments.iteritems():
-    if n not in compiled:
-      compiled[n] = re.compile(from_to[0]) #, flags=re.IGNORECASE
     line = compiled[n].sub(from_to[1], line)
   return line
 
@@ -161,10 +163,6 @@ def repl(org):
 
 left = repl(left)
 right = repl(right)
-
-
-def line_similarity(a, b):
-  return similarity(a, b)
 
 # compute similarity matrix
 leftlen = len(left)
@@ -215,8 +213,6 @@ if line_prefixes:
   RR = "r"
   EE = " "
 
-# right centric view
-
 blocks_right = {}
 
 # search for long common subsequences, and extend them.
@@ -227,13 +223,6 @@ for j, _b in iterseq(right):
     if matched_left[i]:
       continue
     if m2[i][j] > 0.95:
-      #if i >= 1 and j >= 1:
-      #  # BUG(baryluk) This is not correct.
-      #  # Previous line maybe have a match, but not nacassarly this match was included in any block!
-      #  # Commenting out for now, as 'if matched_left[i] continue', is sufficient.
-      #  # Block matching would be even better.
-      #  if m2[i-1][j-1] > 0.95:
-      #    continue
       matched_left[i] = True
       matched_right[j] = True
       k = 0
@@ -254,16 +243,13 @@ def red(s):
 def green(s):
   return ansi.OKGREEN+s+ansi.ENDC
 
-# TODO(baryluk): Do not preallocate 4 columns for line number.
-# It may be too small (but using this file for 9999 is already creazy),
-# or too mouch (for small files).
-
 W=2
 if leftlen > 99 or rightlen > 99:
   W = 3
 if leftlen > 999 or rightlen > 999:
   W = 4
 W += 1 # workaround around IMHO % 3d bug, TODO(baryluk): fix it
+
 WW="%s% "+str(W)+"d"
 WL=LL+"% "+str(W)+"d"
 WR=RR+"% "+str(W)+"d"
@@ -273,24 +259,25 @@ XX=EE+" "*W
 print red("Removals")+" from left file, "+blue("moves")+" and "+green("additions")+" to right file:"
 print red("--- "+leftfilename)
 print green("+++ "+rightfilename)
-for i, _a in iterseq(left):
+
+# first print lines removed from left file, before any blocks in right file
+for i, a in iterseq(left):
   if not matched_left[i]:
     left_removed += 1
-    print (WL+"->"+XX+" "+red("- %s")) % (i+1, left[i].rstrip())
+    print (WL+"->"+XX+" "+red("- %s")) % (i+1, a.rstrip())
   else:
     break
+
+# right centric view
+
 for j, _b in iterseq(right):
   if j in blocks_right:
     i, k = blocks_right[j]
-    #print "-------------\\"
-    #print "-------------\\ l%04d-l%04d -> r%04d-r%04d  (%d lines)" % (i+1, i+k+1, j+1, j+k+1, k)
     print "-"*(2*W+3) + "\\ l%04d-l%04d -> r%04d-r%04d  (%d lines)" % (i+1, i+k+1, j+1, j+k+1, k)
     was_shortened = False
     for kk in xrange(k):
       left_right_matched += 1
       c = "|"
-#      if kk == k-1:
-#        c = "\\"
       if kk < shorten_long_matches/2 or kk>(k-shorten_long_matches/2):
         print (WL+"->"+WR+" "+blue("%s %s")) % (i+kk+1, j+kk+1, c, left[i+kk].rstrip())
       else:
@@ -311,8 +298,7 @@ for j, _b in iterseq(right):
     print (XX+"->"+WR+" "+green("+ %s")) % (j+1, _b.rstrip())
 
 if summary_left:
-  print "Removed from left file:"
-  #print "-----"
+  print red("Removed")+" from left file:"
   for i, _a in iterseq(left):
     if not matched_left[i]:
       if i > 0 and matched_left[i-1]:
@@ -320,7 +306,7 @@ if summary_left:
       print (WL+"->"+XX+" "+red("- %s")) % (i+1, _a.rstrip())
 
 if summary_right:
-  print "Added to right file"
+  print green("Added")+" to right file"
   for j, _b in iterseq(right):
     if not matched_right[j]:
       if i > 0 and matched_right[j-1]:
