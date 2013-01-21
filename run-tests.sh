@@ -8,9 +8,11 @@ do
 		continue
 	fi
 	./wbdiff.py "$t/left" "$t/right" > "$t/output"
-	cmp "$t/output" "$t/expected"
+	grep -v 'Initial context length used' "$t/expected" > "$t/expected.filtered"
+	grep -v 'Initial context length used' "$t/output" > "$t/output.filtered"
+	cmp "$t/output.filtered" "$t/expected.filtered"
 	O=$?
-	diff "$t/output" "$t/expected"
+	diff "$t/output.filtered" "$t/expected.filtered"
 	if [ "x$O" = "x0" ]; then
 		echo "OK"
 	else

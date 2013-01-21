@@ -69,7 +69,7 @@ line_prefixes = False
 summary_left = False
 summary_right = False
 summary_stats = True
-context_matching = 5   # 3..11 is sensible range
+context_matching = 3   # 3..11 is sensible range
 shorten_long_matches = 16 # lenght of biggest block to show, above that,
                           # we will split block in half, and show ...
 

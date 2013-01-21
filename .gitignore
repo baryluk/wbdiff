@@ -1,2 +1,4 @@
 *.py[cod]
 tests/*/output
+tests/*/expected.filtered
+tests/*/output.filtered
