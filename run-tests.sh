@@ -7,6 +7,10 @@ do
 		echo "SKIPPED"
 		continue
 	fi
+	if ! [ -f "$t/left" ] && ! [ -f "$t/right" ]; then
+		echo "MISSING_INPUT_FILES"
+		continue
+	fi
 	# Uncomment if you want to update expected output files.
 	# BE ABSOLUTLY SURE THEY ARE CORRECT!
 	#./wbdiff.py --no-color "$t/left" "$t/right" > "$t/expected"
