@@ -1,0 +1,31 @@
+[91mRemovals[0m from left file, [94mmoves[0m and [92madditions[0m to right file:
+[91m--- tests/1b/left[0m
+[92m+++ tests/1b/right[0m
+---------\ l0001-l0022 -> r0001-r0022  (21 lines)
+  1->  1 [94m| a[0m
+  2->  2 [94m| b[0m
+  3->  3 [94m| c[0m
+  4->  4 [94m| d[0m
+  5->  5 [94m| e[0m
+  6->  6 [94m| f[0m
+  7->  7 [94m| g[0m
+  8->  8 [94m| h[0m
+ ..-> .. [94m:[0m
+ (6 lines skiped)
+ ..-> .. [94m:[0m
+ 15-> 15 [94m| o[0m
+ 16-> 16 [94m| p[0m
+ 17-> 17 [94m| q[0m
+ 18-> 18 [94m| r[0m
+ 19-> 19 [94m| s[0m
+ 20-> 20 [94m| t[0m
+ 21-> 21 [94m| v[0m
+---------/
+
+[93mDiff statistics:
+	Initial context length used: 5
+	Number of matching (extended) blocks: 1
+	Number of lines in matching (extended) blocks: 21 21
+	Number of lines removed from left file: 0
+	Number of new lines added to right file: 0
+	Weighted cost (blocks + removed + added): 0[0m
