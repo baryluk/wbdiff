@@ -73,6 +73,25 @@ context_matching = 7   # 3..11 is sensible range
 shorten_long_matches = 16 # lenght of biggest block to show, above that,
                           # we will split block in half, and show ...
 
+# Usage of backreferences in "regular expressions" here,
+# is explicitly supported by wbdiff.
+# They are not in formal sense a regular expressions,
+# but they should be very short, simple, most of them
+# should also be fast, and are very usefull here, so
+# why not.
+# Replacments are applied prior to comparision of lines,
+# so they are usefull method of discarding common classes
+# of small changes.
+# They will still be displayed, but in slightly different way.
+replacments = {
+  "Incrementation": (r"\b([a-zA-Z_][a-zA-Z0-9_]*)\s*=\1\s*\+\s*1\b", r"\1++"),
+  "Decrementation": (r"\b([a-zA-Z_][a-zA-Z0-9_]*)\s*=\1\s*-\s*1\b", r"\1--"),
+  "Leading whitespace": (r"^\s+", r""),
+  "Trailing whitespace": (r"\s+$", r""),
+  "Log timestamp": (r"^(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) [012][0-9] [012][0-9]:[0-6][0-9]:[0-6][0-9] (\w+(?:\.\w+)*) kernel: \[ *[0-9]+\.[0-9]+\] ", r"\1  kernel:  ")
+}
+
+
 import itertools
 
 def iterseq(sequence):
@@ -100,25 +119,6 @@ class _ansi:
 ansi = _ansi()
 if not colors:
   ansi.disable()
-
-# Usage of backreferences in "regular expressions" here,
-# is explicitly supported by wbdiff.
-# They are not in formal sense a regular expressions,
-# but they should be very short, simple, most of them
-# should also be fast, and are very usefull here, so
-# why not.
-# Replacments are applied prior to comparision of lines,
-# so they are usefull method of discarding common classes
-# of small changes.
-# They will still be displayed, but in slightly different way.
-replacments = {
-  "Incrementation": (r"\b([a-zA-Z_][a-zA-Z0-9_]*)\s*=\1\s*\+\s*1\b", r"\1++"),
-  "Decrementation": (r"\b([a-zA-Z_][a-zA-Z0-9_]*)\s*=\1\s*-\s*1\b", r"\1--"),
-  "Leading whitespace": (r"^\s+", r""),
-  "Trailing whitespace": (r"\s+$", r""),
-  "Log timestamp": (r"^(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) [012][0-9] [012][0-9]:[0-6][0-9]:[0-6][0-9] (\w+(?:\.\w+)*) kernel: \[ *[0-9]+\.[0-9]+\] ", r"\1  kernel:  ")
-}
-
 commonalize_diff_compact_delta = False
 
 import difflib
