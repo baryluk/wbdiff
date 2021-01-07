@@ -58,7 +58,9 @@ Or in colors:
 ## Features:
 
   - Detection of moved code blocks
-  - Shortening long blocks
+  - Fuzzy matching on both block and line level
+  - Adaptative moved blocks and fuzzy matching
+  - Shortening of long blocks
   - Color output
   - Statistics at the end of diff output
   - Support for reading compressed files transparently (.gz, .bz2)
@@ -70,12 +72,9 @@ Or in colors:
 
 ## TODO:
 
-  - Good fuzzy matching
-  - Adaptative moved blocks and fuzzy matching
   - Splited/merged lines detection
   - Recursive diffing of multiple files/directories
   - Speed optimizations
-
 
 ## History
 

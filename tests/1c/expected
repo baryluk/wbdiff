@@ -1,18 +1,18 @@
 Removals from left file, moves and additions to right file:
---- tests/1b/left
-+++ tests/1b/right
----------\ l0001–l0022 -> r0001–r0022  (21 lines)
+--- tests/1c/left
++++ tests/1c/right
+---------\ l0001–l0025 -> r0001–r0025  (24 lines)
   1->  1 | a
  ..-> .. :
- (19 lines skipped)
+ (22 lines skipped)
  ..-> .. :
- 21-> 21 | v
+ 24-> 24 | z
 ---------/
 
 Diff statistics:
 	Initial context length used: 3
 	Number of matching (extended) blocks: 1
-	Number of lines in matching (extended) blocks: 21
+	Number of lines in matching (extended) blocks: 24
 	Number of lines removed from left file: 0
 	Number of new lines added to right file: 0
 	Weighted cost (blocks + removed + added): 0

@@ -4,7 +4,7 @@ Removals from left file, moves and additions to right file:
   1->    - a
   2->    - b
   3->    - c
----------\ l0004-l0015 -> r0001-r0012  (11 lines)
+---------\ l0004–l0015 -> r0001–r0012  (11 lines)
   4->  1 | d
   5->  2 | e
   6->  3 | f

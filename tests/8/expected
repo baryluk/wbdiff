@@ -2,7 +2,7 @@ Removals from left file, moves and additions to right file:
 --- tests/8/left
 +++ tests/8/right
    ->  1 + 0
----------\ l0001-l0007 -> r0002-r0008  (6 lines)
+---------\ l0001–l0007 -> r0002–r0008  (6 lines)
   1->  2 | a
   2->  3 | b
   3->  4 | c
@@ -10,7 +10,7 @@ Removals from left file, moves and additions to right file:
   5->  6 | e
   6->  7 | f
 ---------/
----------\ l0011-l0015 -> r0008-r0012  (4 lines)
+---------\ l0011–l0015 -> r0008–r0012  (4 lines)
  11->  8 | k
  12->  9 | l
  13-> 10 | m
@@ -23,7 +23,7 @@ Removals from left file, moves and additions to right file:
    -> 16 + x
    -> 17 + y
    -> 18 + z
----------\ l0007-l0010 -> r0019-r0022  (3 lines)
+---------\ l0007–l0010 -> r0019–r0022  (3 lines)
   7-> 19 | g
   8-> 20 | h
   9-> 21 | i

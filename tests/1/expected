@@ -1,7 +1,7 @@
 Removals from left file, moves and additions to right file:
 --- tests/1/left
 +++ tests/1/right
----------\ l0001-l0015 -> r0001-r0015  (14 lines)
+---------\ l0001–l0015 -> r0001–r0015  (14 lines)
   1->  1 | a
   2->  2 | b
   3->  3 | c

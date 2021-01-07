@@ -1,0 +1,1064 @@
+Removals from left file, moves and additions to right file:
+--- tests/fuzzy_big1/left
++++ tests/fuzzy_big1/right
+-----------\ l0001–l0022 -> r0001–r0022  (21 lines)
+   1->   1 | #!/usr/bin/env python3
+   2->   2 | 
+   3->   3 M # wbdiff[-.py-] - sophisticated diff utility
+   4->   4 | #
+   5->   5 | # Copyright: Witold Baryluk, 2013, 2021
+   6->   6 | #
+   7->   7 | # MIT license
+   8->   8 | #
+   9->   9 | # This is simplistic tool for detecting moved blocks
+  10->  10 | # and edits of code in text files.
+  11->  11 | #
+  12->  12 | # It can be used just like normal diff utility, but it additionally
+  13->  13 | # supports line movement detection, fuzzy matching, colored output,
+  14->  14 | # collapsing very long runs of similar lines / moves
+  15->  15 | # and runs up much slower.
+  16->  16 | #
+  17->  17 M # Algorithm is O(k[-*-][+⋅+]n[-^2*-][+²⋅+]l[-^2-][+²+]), where k is context lenght, n number
+  18->  18 | # of lines, l lenght of lines.
+  19->  19 | #
+  20->  20 M # If no fuzzy matching is used, then algorithm is basically O(n[-^2*-][+²⋅+]l).
+  21->  21 | #
+-----------/
+    ->  22 + # It could be improved in the future tho, to be O(n⋅l) probably tho.
+-----------\ l0028–l0029 -> r0023–r0024  (1 lines)
+  28->  23 | #
+-----------/
+-----------\ l0022–l0028 -> r0024–r0030  (6 lines)
+  22->  24 | # There are multiple features on the horizon, like automatic compressed
+  23->  25 | # files support, adaptative context length estimation, white space removal,
+  24->  26 | # custom replacments matching,
+  25->  27 | # speed optimizations for case of small number of block movements,
+  26->  28 | # side-by-side comparission (console and HTML)
+  27->  29 | # and graphical visualizer (using GraphViz probably) and GUI frontend.
+-----------/
+-----------\ l0030–l0031 -> r0030–r0031  (1 lines)
+  30->  30 | #
+-----------/
+-----------\ l0029–l0030 -> r0031–r0032  (1 lines)
+  29->  31 M # If you want to pipe output to [+`+]less[+`+], use [+`+]less -RS[+`+]
+-----------/
+-----------\ l0033–l0034 -> r0032–r0033  (1 lines)
+  33->  32 | #
+-----------/
+-----------\ l0031–l0033 -> r0033–r0035  (2 lines)
+  31->  33 | # This script runs in 0.165 seconds on my benchmark (300 lines),
+  32->  34 M # compared to 0.019 seconds by [+`+]diff -U 300[+`+] ([+"+]unified diff[+"+], with big context).
+-----------/
+-----------\ l0037–l0038 -> r0035–r0036  (1 lines)
+  37->  35 | #
+-----------/
+-----------\ l0034–l0037 -> r0036–r0039  (3 lines)
+  34->  36 | # Difference is big, but this program should be usable for manual execution
+  35->  37 | # with files of about 5000 lines. For patches, and automatic execution
+  36->  38 | # classic diff algorithm is probably better because of O(n) algorithm used.
+-----------/
+-----------\ l0046–l0047 -> r0039–r0040  (1 lines)
+  46->  39 | #
+-----------/
+-----------\ l0038–l0046 -> r0040–r0048  (8 lines)
+  38->  40 | # Similar good programs, which can align codes in non-sequential manner:
+  39->  41 | #  WinDiff by Microsoft (free, comes with source code, runs under Windows, and WINE)
+  40->  42 | #    - very good results, but old UI
+  41->  43 | #  WinMerge (free open-source, for Windows, runs also on WINE, native port in preparation
+  42->  44 | #    - modern UI, but results are inferior
+  43->  45 | #  Araxis Merge by Araxis (commercial, for Windows, Mac OS X and WINE, with trial)
+  44->  46 | #    - very poor results
+  45->  47 | #    - even more advanced UI, but even more bad results, sometimes completly useless
+-----------/
+-----------\ l0058–l0059 -> r0048–r0049  (1 lines)
+  58->  48 | #
+-----------/
+-----------\ l0047–l0058 -> r0049–r0060  (11 lines)
+  47->  49 | # Other tools checked, which essentially doesn't support moved blocks detecion:
+  48->  50 | #   BeyondCompare by Scooter Software, Inc. (Mac OS X, Linux)
+  49->  51 | #   P4Merge: Visual Merge Tool by Perfore (Windows, Mac OS X, Linux)
+  50->  52 | #   DeltaWalker by Deltopia (Mac OS X, Windows, Linux)
+  51->  53 | #   DiffMerge by SourceGear (Windows, Mac OS X, Linux)
+  52->  54 | #   Code Compare by Devart (Windows)
+  53->  55 | #   ECMerge by Ellie Computing (Windows,Mac OS X, Linux, Solaris)
+  54->  56 | #   Compare It! by Grig Software (Windows)
+  55->  57 | #   Synchronize It! by Grig Software (Windows)
+  56->  58 | #   ExamDiff Pro by prestoSoft (Windows)
+  57->  59 | #   Open source: Meld, KDiff3, tkdiff, Advanced Diff (Linux, Windows, Mac OS X)
+-----------/
+-----------\ l0060–l0061 -> r0060–r0061  (1 lines)
+  60->  60 | #
+-----------/
+-----------\ l0059–l0060 -> r0061–r0062  (1 lines)
+  59->  61 | # Pretty sad, so many tools, non does main job good.
+-----------/
+    ->  62 + #
+-----------\ l0061–l0071 -> r0063–r0073  (10 lines)
+  61->  63 | # I may think about creating GUI ala Meld, WinMerge, KDiff3 or Araxis Merge.
+  62->  64 | # I will probably use GTK+ (version 3), so stay tuned.
+  63->  65 | 
+  64->  66 | import argparse
+  65->  67 | 
+  66->  68 | parser = argparse.ArgumentParser(description='Displays difference between two files.')
+  67->  69 | parser.add_argument('files', metavar='file', type=str, nargs=2,
+  68->  70 M                     help='[-f-][+F+]iles to compare')
+  69->  71 M parser.add_argument('--[-color-][+fuzzy+]', dest='[-color-][+fuzzy+]', action='store_true',
+  70->  72 M                     default=[-Tru-][+Fals+]e,
+-----------/
+    ->  73 +                     help='Use fuzzy matching, this considers lines similar if only small part of it was changed')
+-----------\ l0072–l0073 -> r0074–r0075  (1 lines)
+  72->  74 M parser.add_argument('-[--no-]-color', dest='color', action='store_[-fals-][+tru+]e',
+-----------/
+-----------\ l0081–l0082 -> r0075–r0076  (1 lines)
+  81->  75 |                     default=True,
+-----------/
+-----------\ l0071–l0072 -> r0076–r0077  (1 lines)
+  71->  76 M                     help='[-u-][+U+]se color output')
+-----------/
+-----------\ l0101–l0102 -> r0077–r0078  (1 lines)
+ 101->  77 M parser.add_argument('--no-[-read--]co[-mp-][+lo+]r[+', d+]es[-sed-fi-][+t='co+]l[-es-][+or+]', action='store_false',
+-----------/
+-----------\ l0073–l0081 -> r0078–r0086  (8 lines)
+  73->  78 M                     help='[-d-][+D+]isable color output')
+  74->  79 | parser.add_argument('--line-prefixes', dest='line_prefixes', action='store_true',
+  75->  80 M                     help='[-a-][+A+]dd l and r before line numbers')
+  76->  81 | parser.add_argument('--summary-left', dest='summary_left', action='store_true',
+  77->  82 M                     help='[-s-][+S+]how separetly removed lines from left file')
+  78->  83 | parser.add_argument('--summary-right', dest='summary_right', action='store_true',
+  79->  84 M                     help='[-s-][+S+]how separetly add lines to right file')
+  80->  85 | parser.add_argument('--summary-stats', dest='summary_stats', action='store_true',
+-----------/
+-----------\ l0084–l0085 -> r0086–r0087  (1 lines)
+  84->  86 M                     default=[-Fals-][+Tru+]e,
+-----------/
+-----------\ l0082–l0084 -> r0087–r0089  (2 lines)
+  82->  87 M                     help='[-s-][+S+]how statistics of diff, after printing diff')
+  83->  88 | parser.add_argument('--no-summary-stats', dest='summary_stats', action='store_false',
+-----------/
+-----------\ l0088–l0089 -> r0089–r0090  (1 lines)
+  88->  89 M                     default=[-3-][+False+],
+-----------/
+-----------\ l0085–l0088 -> r0090–r0093  (3 lines)
+  85->  90 M                     help='[-o-][+O+]posite of --summary-stats')
+  86->  91 | parser.add_argument('--initial-context-matchning', type=int,
+  87->  92 |                     dest='initial_context_matching',
+-----------/
+-----------\ l0092–l0093 -> r0093–r0094  (1 lines)
+  92->  93 M                     default=[-16-][+3+],
+-----------/
+-----------\ l0089–l0090 -> r0094–r0095  (1 lines)
+  89->  94 M                     help='[-t-][+T+]week internal initial context matching length (in general range 3-11 should be sensible)')
+-----------/
+    ->  95 + parser.add_argument('--fuzzy-threshold', dest='fuzzy_threshold', type=float,
+-----------\ l0098–l0099 -> r0096–r0097  (1 lines)
+  98->  96 M                     default=[-True-][+0.80+],
+-----------/
+    ->  97 +                     help='How similar lines need to be to be considered a match.')
+    ->  98 + parser.add_argument('--fuzzy-weighted', dest='fuzzy_weighted', action='store_true',
+    ->  99 +                     default=False,
+    -> 100 +                     help='When doing fuzzy matching in larger, blocks, use adaptive similarity, depending on how big the block is. I.e. allow larger differences on some lines, as long the whole block has suffiently low differences')
+-----------\ l0090–l0092 -> r0101–r0103  (2 lines)
+  90-> 101 | parser.add_argument('--shorten-long-matches', type=int,
+  91-> 102 |                     dest='shorten_long_matches',
+-----------/
+    -> 103 +                     default=16,
+-----------\ l0093–l0094 -> r0104–r0105  (1 lines)
+  93-> 104 M                     help='[-m-][+M+]atched blocks longer than this will be shortened')
+-----------/
+    -> 105 + parser.add_argument('--compact-delta', dest='commonalize_diff_compact_delta', action='store_true',
+    -> 106 +                     default=False,
+    -> 107 +                     help='Ignore whitespaces, when doing similarity checks, i.e. changed indentation, or adding spaces around binary operators to improve code style, etc.. Consider them fully matching basically')
+-----------\ l0097–l0098 -> r0108–r0109  (1 lines)
+  97-> 108 M parser.add_argument('--[-r-][+skip-+]e[+qu+]a[-d-compressed-fi-]l[-es-]', action='store_true',
+-----------/
+    -> 109 +                     dest='skip_equal',
+    -> 110 +                     help='If there are no difference at all, or there are big equal blocks at the start or end, skip them. This makes wbdiff be silent on exactly equal files (similar to other diff tools)')
+-----------\ l0094–l0097 -> r0111–r0114  (3 lines)
+  94-> 111 | parser.add_argument('--use-default-replacments',
+  95-> 112 |                     dest='use_default_replacments', action='store_true',
+  96-> 113 M                     help='[-a-][+A+]pply default replacments rules from wbdiff on input files')
+-----------/
+    -> 114 + parser.add_argument('--read-compressed-files', action='store_true',
+    -> 115 +                     default=True,
+-----------\ l0099–l0101 -> r0116–r0118  (2 lines)
+  99-> 116 |                     dest='read_compressed_files',
+ 100-> 117 M                     help='[-i-][+I+]f input files are compressed (like .gz, .bz2), decompress prior to performing actuall diff (enabled by default)')
+-----------/
+    -> 118 + parser.add_argument('--no-read-compressed-files', action='store_false',
+-----------\ l0102–l0104 -> r0119–r0121  (2 lines)
+ 102-> 119 |                     dest='read_compressed_files',
+ 103-> 120 M                     help='[-d-][+D+]o not attempt to decompress compressed files')
+-----------/
+    -> 121 + parser.add_argument('--no-header', action='store_false',
+    -> 122 +                     dest='header',
+    -> 123 +                     help='Do not show the explation header at the start')
+    -> 124 + parser.add_argument('--no-preamble', action='store_false',
+    -> 125 +                     dest='preamble',
+    -> 126 +                     help='Do not show the preamble, "--- left", "+++ right" at the start')
+    -> 127 + parser.add_argument('--no-frames', action='store_false',
+    -> 128 +                     dest='frames',
+    -> 129 +                     help='Do not show the frames (i.e. "-----------\ l0202–l0206 -> r0273–r0277  (4 lines)") around each matched block with line range info, ')
+    -> 130 + parser.add_argument('--git', action='store_true',
+    -> 131 +                     dest='git',
+    -> 132 +                     help='Enable git mode. Exit with status 0, even for different files. And print extra two lines at the end of the output.')
+    -> 133 + parser.add_argument('--debug', action='store_true',
+    -> 134 +                     dest='debug',
+    -> 135 +                     help='Enable various debugging reports, and internal consistency checks')
+-----------\ l0104–l0105 -> r0136–r0137  (1 lines)
+ 104-> 136 | 
+-----------/
+-----------\ l0106–l0107 -> r0137–r0138  (1 lines)
+ 106-> 137 | 
+-----------/
+-----------\ l0105–l0106 -> r0138–r0139  (1 lines)
+ 105-> 138 | args = parser.parse_args()
+-----------/
+-----------\ l0109–l0110 -> r0139–r0140  (1 lines)
+ 109-> 139 | 
+-----------/
+-----------\ l0107–l0109 -> r0140–r0142  (2 lines)
+ 107-> 140 | #16 # lenght of biggest block to show, above that,
+ 108-> 141 M                           # we will split block in half, and show ...[+ (dot dot dot)+]
+-----------/
+-----------\ l0110–l0111 -> r0142–r0143  (1 lines)
+ 110-> 142 | 
+-----------/
+-----------\ l0128–l0129 -> r0143–r0144  (1 lines)
+ 128-> 143 | 
+-----------/
+-----------\ l0111–l0128 -> r0144–r0161  (17 lines)
+ 111-> 144 | # Usage of backreferences in "regular expressions" here,
+ ...-> ... :
+ (15 lines skipped)
+ ...-> ... :
+ 127-> 160 | }
+-----------/
+-----------\ l0138–l0139 -> r0161–r0162  (1 lines)
+ 138-> 161 | 
+-----------/
+ 139->     -   def disable(self):
+-----------\ l0129–l0138 -> r0162–r0171  (9 lines)
+ 129-> 162 | # http://stackoverflow.com/questions/287871/print-in-terminal-with-colors-using-python
+ 130-> 163 | class _ansi:
+ 131-> 164 |   HEADER = '\033[95m'
+ 132-> 165 |   OKBLUE = '\033[94m'
+ 133-> 166 |   OKGREEN = '\033[92m'
+ 134-> 167 |   WARNING = '\033[93m'
+ 135-> 168 |   FAIL = '\033[91m'
+ 136-> 169 |   ENDC = '\033[0m'
+ 137-> 170 |   BOLD = "\033[1m"
+-----------/
+-----------\ l0147–l0148 -> r0171–r0172  (1 lines)
+ 147-> 171 | 
+-----------/
+    -> 172 + class _nocolor:
+-----------\ l0140–l0144 -> r0173–r0177  (4 lines)
+ 140-> 173 M   [-  self.-]HEADER = ""
+ 141-> 174 M   [-  self.-]OKBLUE = ""
+ 142-> 175 M   [-  self.-]OKGREEN = ""
+ 143-> 176 M   [-  self.-]WARNING = ""
+-----------/
+ 144->     -     self.FAIL = ""
+ 145->     -     self.ENDC = ""
+ 146->     -     self.BOLD = ""
+    -> 177 +   FAIL = ""
+    -> 178 +   ENDC = ""
+    -> 179 +   BOLD = ""
+-----------\ l0152–l0153 -> r0180–r0181  (1 lines)
+ 152-> 180 | 
+-----------/
+-----------\ l0148–l0150 -> r0181–r0183  (2 lines)
+ 148-> 181 | ansi = _ansi()
+ 149-> 182 | if not args.color:
+-----------/
+ 150->     -   ansi.disable()
+ 151->     - commonalize_diff_compact_delta = False
+    -> 183 +   ansi = _nocolor
+-----------\ l0154–l0155 -> r0184–r0185  (1 lines)
+ 154-> 184 | 
+-----------/
+    -> 185 + # Handy helpers to color just short string inside longer string.
+-----------\ l0290–l0292 -> r0186–r0188  (2 lines)
+ 290-> 186 | def blue(s):
+ 291-> 187 M   return ansi.OKBLUE[+ +]+[+ +]s[+ +]+[+ +]ansi.ENDC
+-----------/
+-----------\ l0161–l0162 -> r0188–r0189  (1 lines)
+ 161-> 188 | 
+-----------/
+-----------\ l0292–l0294 -> r0189–r0191  (2 lines)
+ 292-> 189 | def red(s):
+ 293-> 190 M   return ansi.FAIL[+ +]+[+ +]s[+ +]+[+ +]ansi.ENDC
+-----------/
+-----------\ l0164–l0165 -> r0191–r0192  (1 lines)
+ 164-> 191 | 
+-----------/
+-----------\ l0294–l0297 -> r0192–r0195  (3 lines)
+ 294-> 192 | def green(s):
+ 295-> 193 M   return ansi.OKGREEN[+ +]+[+ +]s[+ +]+[+ +]ansi.ENDC
+ 296-> 194 | 
+-----------/
+    -> 195 + def yellow(s):
+    -> 196 +   return ansi.WARNING + s + ansi.ENDC
+-----------\ l0167–l0168 -> r0197–r0198  (1 lines)
+ 167-> 197 | 
+-----------/
+    -> 198 + debug = args.debug
+    -> 199 + commonalize_diff_compact_delta = args.commonalize_diff_compact_delta
+    -> 200 + fuzzy_adaptive = args.commonalize_diff_compact_delta
+-----------\ l0171–l0172 -> r0201–r0202  (1 lines)
+ 171-> 201 | 
+-----------/
+    -> 202 + # Read files in in full, and split into lines.
+-----------\ l0172–l0175 -> r0203–r0206  (3 lines)
+ 172-> 203 | leftfilename = args.files[0]
+ 173-> 204 | rightfilename = args.files[1]
+ 174-> 205 | 
+-----------/
+    -> 206 + # We display the header as soon as possible, so in case of crash,
+    -> 207 + # we it is easier to know which files were involved.
+    -> 208 + if args.header:
+-----------\ l0311–l0312 -> r0209–r0210  (1 lines)
+ 311-> 209 M [+  +]print(red("Removals") + " from left file, " + blue("moves") + " and " + green("additions") + " to right file:")
+-----------/
+    -> 210 + if args.preamble:
+-----------\ l0312–l0315 -> r0211–r0214  (3 lines)
+ 312-> 211 M [+  +]print(red("--- " + leftfilename))
+ 313-> 212 M [+  +]print(green("+++ " + rightfilename))
+ 314-> 213 | 
+-----------/
+-----------\ l0175–l0193 -> r0214–r0232  (18 lines)
+ 175-> 214 | file_reader1 = lambda filename: open(filename, "r")
+ ...-> ... :
+ (16 lines skipped)
+ ...-> ... :
+ 192-> 231 | right = file_reader2(rightfilename).readlines()
+-----------/
+    -> 232 + # We do not remove end lines, as this is helpful for the last line diffing.
+-----------\ l0193–l0194 -> r0233–r0234  (1 lines)
+ 193-> 233 | 
+-----------/
+-----------\ l0153–l0154 -> r0234–r0235  (1 lines)
+ 153-> 234 | import difflib
+-----------/
+-----------\ l0195–l0196 -> r0235–r0236  (1 lines)
+ 195-> 235 | 
+-----------/
+-----------\ l0155–l0161 -> r0236–r0242  (6 lines)
+ 155-> 236 | def diff(a, b):
+ 156-> 237 |   d = difflib.Differ()
+ 157-> 238 |   di = d.compare(a.splitlines(True), b.splitlines(True))
+ 158-> 239 |   if commonalize_diff_compact_delta:
+ 159-> 240 |     di = filter(lambda x: x[0] != " ", di)
+ 160-> 241 |   return "".join(di)
+-----------/
+-----------\ l0201–l0202 -> r0242–r0243  (1 lines)
+ 201-> 242 | 
+-----------/
+-----------\ l0162–l0163 -> r0243–r0244  (1 lines)
+ 162-> 243 | def similarity(a, b):
+-----------/
+ 163->     -   return difflib.SequenceMatcher(None, a, b).ratio()
+    -> 244 +   # TODO(baryluk): Disable autojunk heuristics above 5000 lines.
+    -> 245 +   # Then, after crude matching and block reconstruction,
+    -> 246 +   # recompute it again more accurately.
+    -> 247 +   sequence_matcher = difflib.SequenceMatcher(isjunk=None, a=a, b=b, autojunk=True)
+    -> 248 +   # sequence_matcher.quick_ratio()  # TODO(baryluk): Use it maybe for over 5000 lines? It would help a little.
+    -> 249 +   return sequence_matcher.ratio(), sequence_matcher
+-----------\ l0206–l0207 -> r0250–r0251  (1 lines)
+ 206-> 250 | 
+-----------/
+    -> 251 + fuzzy = args.fuzzy
+    -> 252 + fuzzy_threshold = args.fuzzy_threshold
+-----------\ l0211–l0212 -> r0253–r0254  (1 lines)
+ 211-> 253 | 
+-----------/
+-----------\ l0165–l0166 -> r0254–r0255  (1 lines)
+ 165-> 254 | def line_similarity(a, b):
+-----------/
+ 166->     -   return similarity(a, b)
+    -> 255 +   if not fuzzy:
+-----------\ l0225–l0226 -> r0256–r0257  (1 lines)
+ 225-> 256 |     if a == b:
+-----------/
+    -> 257 +       return 1.0
+-----------\ l0227–l0228 -> r0258–r0259  (1 lines)
+ 227-> 258 |     else:
+-----------/
+ 228->     -       m[i][j] = 0.0
+    -> 259 +       return 0.0
+    -> 260 +   # TODO(baryluk): Cache sequencer_matcher?
+    -> 261 +   ratio, sequencer_matcher = similarity(a, b)
+    -> 262 +   # TODO(baryluk): Boost a similarity, if substantial prefix or suffix are the same, and there are only inserts or removals.
+    -> 263 +   # I.e. AAAAAAAAAAAAAAAAAAAA
+    -> 264 +   #      AAAAAAAAAAAAAAAAAAAA   # KAJSLKJDASLKJDLASKJDLAKSJDLKAJSLKAJSLKDJ
+    -> 265 +   # They should match as similar.
+    -> 266 +   return ratio
+-----------\ l0216–l0217 -> r0267–r0268  (1 lines)
+ 216-> 267 | 
+-----------/
+ 217->     - # Compute similarity matrix.
+-----------\ l0168–l0169 -> r0268–r0269  (1 lines)
+ 168-> 268 | def similar(a, b, threshold):
+-----------/
+ 169->     -   s = similarity(a, b)
+    -> 269 +   ratio, sequencer_matcher = similarity(a, b)
+-----------\ l0170–l0171 -> r0270–r0271  (1 lines)
+ 170-> 270 M   return [-s-][+ratio+] > threshold
+-----------/
+-----------\ l0229–l0230 -> r0271–r0272  (1 lines)
+ 229-> 271 | 
+-----------/
+-----------\ l0194–l0195 -> r0272–r0273  (1 lines)
+ 194-> 272 | import re
+-----------/
+-----------\ l0254–l0255 -> r0273–r0274  (1 lines)
+ 254-> 273 | 
+-----------/
+-----------\ l0196–l0201 -> r0274–r0279  (5 lines)
+ 196-> 274 | def compile_replacments():
+ 197-> 275 |   compiled_replacments = {}
+ 198-> 276 |   for n, from_to in replacments.iteritems():
+ 199-> 277 |     compiled_replacments[n] = re.compile(from_to[0]) #, flags=re.IGNORECASE
+ 200-> 278 |   return compiled_replacments
+-----------/
+-----------\ l0257–l0258 -> r0279–r0280  (1 lines)
+ 257-> 279 | 
+-----------/
+-----------\ l0202–l0206 -> r0280–r0284  (4 lines)
+ 202-> 280 | def apply_replacements_line(compiled_replacments, line):
+ 203-> 281 |   for n, from_to in replacments.iteritems():
+ 204-> 282 |     line = compiled_replacments[n].sub(from_to[1], line)
+ 205-> 283 |   return line
+-----------/
+-----------\ l0258–l0259 -> r0284–r0285  (1 lines)
+ 258-> 284 | 
+-----------/
+ 259->     - LL = ""
+ 260->     - RR = ""
+ 261->     - EE = ""
+-----------\ l0207–l0211 -> r0285–r0289  (4 lines)
+ 207-> 285 | def apply_replacements(compiled_replacments, org):
+ 208-> 286 |   for i, line in enumerate(org):
+ 209-> 287 |     org[i] = apply_replacements_line(compiled_replacments, line)
+ 210-> 288 |   return org
+-----------/
+-----------\ l0266–l0267 -> r0289–r0290  (1 lines)
+ 266-> 289 | 
+-----------/
+-----------\ l0212–l0216 -> r0290–r0294  (4 lines)
+ 212-> 290 | if args.use_default_replacments:
+ 213-> 291 |   compiled_replacments = compile_replacments()
+ 214-> 292 |   left = apply_replacements(compiled_replacments, left)
+ 215-> 293 |   right = apply_replacements(compiled_replacments, right)
+-----------/
+-----------\ l0268–l0269 -> r0294–r0295  (1 lines)
+ 268-> 294 | 
+-----------/
+    -> 295 + # In loops below:
+    -> 296 + #  * i index is used for left file.
+    -> 297 + #  * j index is used for right file.
+    -> 298 + #  * k or kk, is used as an offset from current i and j.
+    -> 299 + #  * a is a left file line connent at index i.
+    -> 300 + #  * b is a right file line connent at index j.
+    -> 301 + #
+    -> 302 + # Remember i, j are zero-based. As is k and kk.
+    -> 303 + # k, kk - after finishing some loops, might
+    -> 304 + # be past the end of file. It will indicate a count matching lines
+    -> 305 + # or equivalently a number of loop iterations performed.
+-----------\ l0285–l0286 -> r0306–r0307  (1 lines)
+ 285-> 306 | 
+-----------/
+-----------\ l0289–l0290 -> r0307–r0308  (1 lines)
+ 289-> 307 | 
+-----------/
+-----------\ l0303–l0304 -> r0308–r0309  (1 lines)
+ 303-> 308 | 
+-----------/
+ 304->     - WW = "%s% " + str(W) + "d"
+    -> 309 + # Compute similarity matrix for each line pair.
+    -> 310 + # Each entry is between 0.0 and 1.0 inclusive.
+-----------\ l0218–l0220 -> r0311–r0313  (2 lines)
+ 218-> 311 | leftlen = len(left)
+ 219-> 312 | rightlen = len(right)
+-----------/
+-----------\ l0308–l0309 -> r0313–r0314  (1 lines)
+ 308-> 313 | 
+-----------/
+    -> 314 + import sys
+-----------\ l0322–l0323 -> r0315–r0316  (1 lines)
+ 322-> 315 | 
+-----------/
+    -> 316 + # Heuristic for equal files.
+    -> 317 + if leftlen == rightlen:
+    -> 318 +   equal = True
+    -> 319 +   for i in range(leftlen):
+    -> 320 +     if left[i] != right[i]:
+    -> 321 +       equal = False
+-----------\ l0244–l0245 -> r0322–r0323  (1 lines)
+ 244-> 322 M [-    -]      break
+-----------/
+ 245->     -         #s *= m[i + k][j + k]
+ 246->     -     #s = s ** (1.0 / kk)
+    -> 323 +   if equal:
+    -> 324 +     if args.skip_equal:
+    -> 325 +       sys.exit(0)
+-----------\ l0324–l0325 -> r0326–r0327  (1 lines)
+ 324-> 326 | 
+-----------/
+ 325->     - for j, _b in enumerate(right):
+-----------\ l0351–l0352 -> r0327–r0328  (1 lines)
+ 351-> 327 | 
+-----------/
+-----------\ l0220–l0221 -> r0328–r0329  (1 lines)
+ 220-> 328 | m = list(range(leftlen))
+-----------/
+    -> 329 + # TODO(baryluk): This doesn't scale above 5000+ lines on each side.
+    -> 330 + # Combine this with a next loop, that does block merging,
+    -> 331 + # and do on the fly, this way we can be almost linear, instead
+    -> 332 + # of quadratic.
+-----------\ l0359–l0360 -> r0333–r0334  (1 lines)
+ 359-> 333 | 
+-----------/
+-----------\ l0221–l0225 -> r0334–r0338  (4 lines)
+ 221-> 334 | for i, a in enumerate(left):
+ 222-> 335 |   m[i] = list(range(rightlen))
+ 223-> 336 |   for j, b in enumerate(right):
+ 224-> 337 M     [-#-]m[i][j] = line_similarity(a, b)
+-----------/
+-----------\ l0367–l0368 -> r0338–r0339  (1 lines)
+ 367-> 338 | 
+-----------/
+    -> 339 + from math import log, exp
+-----------\ l0378–l0379 -> r0340–r0341  (1 lines)
+ 378-> 340 | 
+-----------/
+-----------\ l0230–l0232 -> r0341–r0343  (2 lines)
+ 230-> 341 | # Use context for similarity measure.
+ 231-> 342 | m2 = list(range(leftlen))
+-----------/
+    -> 343 + for i in range(leftlen):
+-----------\ l0233–l0234 -> r0344–r0345  (1 lines)
+ 233-> 344 |   m2[i] = list(range(rightlen))
+-----------/
+ 234->     -   for j, b in enumerate(right):
+ 235->     -     s = 1.0
+    -> 345 +   # TODO(baryluk): Doing a full L*R checks, is a bit wasteful.
+    -> 346 +   # We can improve it a lot. If we find a good long block,
+    -> 347 +   # consider it final, and don't try to search it again anywhere.
+    -> 348 +   #
+    -> 349 +   # TODO(baryluk): But, what about code duplication. I.e. One big
+    -> 350 +   # block is copy-pasted several times into new file. Should we detect it
+    -> 351 +   # maybe warn to use function, macro, template, class, etc?
+    -> 352 +   for j in range(rightlen):
+    -> 353 +     matched_line_count = 0
+    -> 354 +     block_similarity_ratio = 1.0
+    -> 355 +     log_block_similarity_ratio = 0.0
+-----------\ l0237–l0241 -> r0356–r0360  (4 lines)
+ 237-> 356 |     # Extend using context, but do no go beyond `context_matching` limit
+ 238-> 357 |     # or last lines.
+ 239-> 358 |     for k in range(args.initial_context_matching):
+ 240-> 359 M       if i + k [-<-][+>=+] leftlen [-and-][+or+] j + k [-<-][+>=+] rightlen:
+-----------/
+    -> 360 +         # End of file on one side.
+-----------\ l0321–l0322 -> r0361–r0362  (1 lines)
+ 321-> 361 M [+    +]    break
+-----------/
+    -> 362 +       similarity_ratio = m[i + k][j + k]
+    -> 363 +       if similarity_ratio < fuzzy_threshold:
+    -> 364 +         break
+    -> 365 +       matched_line_count += 1
+    -> 366 +       if fuzzy_adaptive:
+    -> 367 +         block_similarity_ratio *= similarity_ratio
+    -> 368 +         log_block_similarity_ratio += log(similarity_ratio)
+    -> 369 +     if matched_line_count == 0:
+-----------\ l0226–l0227 -> r0370–r0371  (1 lines)
+ 226-> 370 M       m[+2+][i][j] = [-1-][+(0+].0[+, 0)+]
+-----------/
+-----------\ l0272–l0273 -> r0371–r0372  (1 lines)
+ 272-> 371 M [+  +]    continue
+-----------/
+ 273->     -   for i, _a in enumerate(left):
+    -> 372 +     assert matched_line_count >= 1, f"At least one line need to match or be similar in the block, got {matched_line_count}! i = {i} , j = {j}"
+    -> 373 +     if fuzzy_adaptive:
+    -> 374 +       block_similarity_ratio = block_similarity_ratio ** (1.0 / matched_line_count)
+    -> 375 +       avg_log_block_similarity_ratio = log_block_similarity_ratio / matched_line_count
+    -> 376 +       block_similarity_ratio = exp(avg_log_block_similarity_ratio)
+    -> 377 +     if fuzzy_adaptive and False:
+-----------\ l0247–l0248 -> r0378–r0379  (1 lines)
+ 247-> 378 M [+      +]# [-s-][+S+]ome tweeking to weights
+-----------/
+ 248->     - #    if s < 0.90:
+ 249->     - #      s = 0.0
+    -> 379 +       if block_similarity_ratio < fuzzy_threshold:
+    -> 380 +         # If we are under threshold, then consider them not interesting.
+    -> 381 +         block_similarity_ratio = 0.0
+-----------\ l0250–l0251 -> r0382–r0383  (1 lines)
+ 250-> 382 M [-#-][+  +]    else:
+-----------/
+ 251->     - #      s = (s - 0.90) * 10.0
+ 252->     - #      s = 1.0 - (1.0 - s)**2
+ 253->     -     m2[i][j] = s
+    -> 383 +         # If above threshold, stretch it and make non-linear.
+    -> 384 +         # I.e. stretch 0.90 – 1.0, to 0.0 – 1.0
+    -> 385 +         block_similarity_ratio = (block_similarity_ratio - fuzzy_threshold) * (1.0 - fuzzy_threshold)
+    -> 386 +         # Apply non-linearity.
+    -> 387 +         block_similarity_ratio = 1.0 - (1.0 - block_similarity_ratio)**2
+    -> 388 +     m2[i][j] = (block_similarity_ratio, matched_line_count)
+    -> 389 + 
+    -> 390 + # m - similarity ratios between idividual lines.
+    -> 391 + # m2 - similarity between extended blocks, anchored at specific starting lines
+    -> 392 + #      Each extended block is exteneded as much as possible in general, as long
+    -> 393 + #      there are similarities in adjacent lines.
+    -> 394 + #      m2 can contain various overlaps between extended blocks, and blocks
+    -> 395 + #      might be of varying sizes.
+    -> 396 + 
+    -> 397 + # Flag for each line, if it already was matched to something,
+    -> 398 + # assigned a block. This also speeds up LCS a bit.
+-----------\ l0255–l0257 -> r0399–r0401  (2 lines)
+ 255-> 399 | matched_left = [False] * leftlen
+ 256-> 400 | matched_right = [False] * rightlen
+-----------/
+    -> 401 + 
+    -> 402 + #if debug:
+    -> 403 + #  print("L:", "".join('T' if x else 'F' for x in matched_left), f"T: {matched_left.count(True)}", f"F: {matched_left.count(False)}", f"Length: {leftlen}")
+    -> 404 + #  print("R:", "".join('T' if x else 'F' for x in matched_right), f"T: {matched_right.count(True)}", f"F: {matched_right.count(False)}", f"Length: {rightlen}")
+    -> 405 + 
+    -> 406 + 
+    -> 407 + # Indexed by first right line number in the block.
+    -> 408 + # The values are matching starting line on the left side,
+    -> 409 + # and the length of the block in lines.
+    -> 410 + #
+    -> 411 + # Example: block_right[7] = (2, 10), represents block of size 10: l3–l12 -> r8–r17 (inclusive). Not a typo.
+-----------\ l0267–l0268 -> r0412–r0413  (1 lines)
+ 267-> 412 | blocks_right = {}
+-----------/
+    -> 413 + 
+    -> 414 + def remove_nl(s):
+    -> 415 +   if s and s[-1] == '\n':
+    -> 416 +     return s[:-1]
+-----------\ l0320–l0321 -> r0417–r0418  (1 lines)
+ 320-> 417 |   else:
+-----------/
+    -> 418 +     return s
+    -> 419 + 
+    -> 420 + def escape_tab(s):
+    -> 421 +   return s.replace("\t", "\\t")
+    -> 422 + 
+    -> 423 + def pretty(s):
+    -> 424 +   return escape_tab(s).replace("\n", "\\n")
+    -> 425 + 
+-----------\ l0269–l0270 -> r0426–r0427  (1 lines)
+ 269-> 426 M # Search for long common subsequences[+ (LCS)+], and extend them[-.-][+,+]
+-----------/
+ 270->     - for j, _b in enumerate(right):
+    -> 427 + # forming blocks.
+    -> 428 + for j in range(rightlen):
+-----------\ l0271–l0272 -> r0429–r0430  (1 lines)
+ 271-> 429 |   if matched_right[j]:
+-----------/
+-----------\ l0275–l0276 -> r0430–r0431  (1 lines)
+ 275-> 430 M [-  -]    continue
+-----------/
+ 276->     -     if m2[i][j] > 0.95:
+    -> 431 +   for i in range(leftlen):
+-----------\ l0274–l0275 -> r0432–r0433  (1 lines)
+ 274-> 432 M     [+#+]if matched_[-lef-][+righ+]t[[-i-][+j+]]:
+-----------/
+    -> 433 +     #  break
+-----------\ l0317–l0318 -> r0434–r0435  (1 lines)
+ 317-> 434 M [+  +]  if[- not-] matched_left[i]:
+-----------/
+-----------\ l0337–l0338 -> r0435–r0436  (1 lines)
+ 337-> 435 M [-    -]      continue
+-----------/
+    -> 436 +     block_similarity_ratio, matched_line_count = m2[i][j]
+    -> 437 +     assert block_similarity_ratio >= 0.0
+    -> 438 +     assert block_similarity_ratio <= 1.0
+    -> 439 +     if matched_line_count == 0:
+    -> 440 +       assert block_similarity_ratio == 0.0
+-----------\ l0335–l0336 -> r0441–r0442  (1 lines)
+ 335-> 441 M [-  -]    else:
+-----------/
+ 336->     -         if was_shortened:
+    -> 442 +       assert block_similarity_ratio > 0.0
+    -> 443 +     if block_similarity_ratio >= fuzzy_threshold:
+    -> 444 +       assert m[i + 0][j + 0] >= fuzzy_threshold, f"Expected: m[i + 0][j + 0] = m[{i} + 0][{j} + 0] = {m[i + 0][j + 0]} >= {fuzzy_threshold} = fuzzy_threshold"
+-----------\ l0277–l0279 -> r0445–r0447  (2 lines)
+ 277-> 445 M       [+#+]matched_left[i] = True
+ 278-> 446 M       [+#+]matched_right[j] = True
+-----------/
+    -> 447 +       k = 0  # Matched lines so far.
+    -> 448 +       max_width = 0
+-----------\ l0280–l0282 -> r0449–r0451  (2 lines)
+ 280-> 449 M       while i + k < leftlen and j + k < rightlen and m[i + k][j + k] >[+=+] [-0.95-][+fuzzy_threshold+]:[+ +] # m not m2 !
+ 281-> 450 M        [+ if+] matched_left[i + k][- = True-][+:+]
+-----------/
+    -> 451 +           break
+-----------\ l0282–l0283 -> r0452–r0453  (1 lines)
+ 282-> 452 M        [+ if+] matched_right[j + k][- = True-][+:+]
+-----------/
+    -> 453 +           break
+-----------\ l0355–l0356 -> r0454–r0455  (1 lines)
+ 355-> 454 M [+    +]    if[- not-] matched_left[i[+ + k+]]:
+-----------/
+    -> 455 +           _l = left[i + k]
+    -> 456 +           _r = right[matched_left[i + k] - 1]
+    -> 457 +           print(f"left[{i} + {k}] = '{pretty(_l)}'")
+    -> 458 +           print(f"right[matched_left[{i} + {k}] - 1] = right[{matched_left[i + k] - 1}] = '{pretty(_r)}'")
+    -> 459 +         assert not matched_left[i + k], f"Expected: matched_left[i + k] = matched_left[{i} + {k}] = {matched_left[i + k]} == False; i={i}, j={j}, k={k}"
+    -> 460 +         assert not matched_right[j + k], f"Expected: matched_right[j + k] = matched_right[{j} + {k}] = {matched_right[j + {k}]} == False; i={i}, j={j}, k={k}"
+    -> 461 +         matched_left[i + k] = j + k + 1
+    -> 462 +         matched_right[j + k] = i + k + 1
+    -> 463 +         max_width = max(max_width, len(left[i + k]))
+-----------\ l0241–l0242 -> r0464–r0465  (1 lines)
+ 241-> 464 M         k[-k-] += 1
+-----------/
+ 242->     -         if m[i + k][j + k] == 0.0:
+ 243->     -           s = 0.0
+    -> 465 +       if k >= 1 and (k >= 2 or max_width >= 1) and (max_width > 0):  # Don't consider short small addition to be moves.
+    -> 466 +         # No more similiarity, terminate the block, and add it to the list of blocks.
+    -> 467 +         assert k >= 1, f"Expected: k = {k} >= 1. Internal logic error"
+    -> 468 +         assert matched_left[i + 0]
+    -> 469 +         assert matched_left[i + 0] == j + 1
+    -> 470 +         assert matched_right[j + 0]
+    -> 471 +         assert matched_right[j + 0] == i + 1
+-----------\ l0284–l0285 -> r0472–r0473  (1 lines)
+ 284-> 472 M [+  +]      blocks_right[j] = (i, k)
+-----------/
+    -> 473 +         # break  # No point matching more line on left against right[j]
+    -> 474 + 
+    -> 475 + # At this point, we now have a nice nice list of matching blocks.
+    -> 476 + # All that is left to do is display them.
+    -> 477 + # Additionally we need to: display removed lines from left
+    -> 478 + # file at the start, order matching blocks, interleave
+    -> 479 + # removed and added new lines.
+    -> 480 + # But all the hard fuzzy logic and block matching is already done above.
+    -> 481 + 
+    -> 482 + # Debug check. Check some invariants, etc.
+    -> 483 + if debug:
+    -> 484 +   total_matched = 0
+    -> 485 +   for j, (i, k) in blocks_right.items():
+    -> 486 +     assert k > 0, f"Expected: k = {k} > 0"
+    -> 487 +     assert j + k <= rightlen, f"Expected j + k = {j} + {k} = {j + k} <= {rightlen} = rightlen"
+    -> 488 +     assert i + k <= leftlen, f"Expected i + k = {i} + {k} = {i + k} <= {leftlen} = leftlen"
+-----------\ l0330–l0331 -> r0489–r0490  (1 lines)
+ 330-> 489 |     for kk in range(k):
+-----------/
+    -> 490 +       assert m[i + kk][j + kk] >= fuzzy_threshold, "Expected: m[{i} + {kk}][{i} + {kk}] = {m[i + kk][j + kk]} >= {fuzzy_threshold} to be true"
+    -> 491 +       assert matched_left[i + kk], "Expected: matched_left[i + kk] = matched_left[{i} + {kk}] = {matched_left[i + kk]} > 0"
+    -> 492 +       assert matched_right[j + kk], "Expected: matched_right[j + kk] = matched_right[{j} + {kk}] = {matched_right[j + kk]} > 0"
+    -> 493 +       assert matched_left[i + kk] == j + kk + 1
+    -> 494 +       assert matched_right[j + kk] == i + kk + 1
+    -> 495 +       assert line_similarity(left[i + kk], right[j + kk]) >= fuzzy_threshold
+    -> 496 +       total_matched += 1
+    -> 497 +   assert total_matched <= leftlen, f"Expected: total_matched = {total_matched} <= {leftlen} = leftlen"
+    -> 498 +   assert total_matched <= rightlen, f"Expected: total_matched = {total_matched} <= {rightlen} = rightlen"
+    -> 499 +   #print("Total matched:", total_matched)
+    -> 500 +   #print("L:", "".join('T' if x else 'F' for x in matched_left), f"T: {matched_left.count(True)}", f"F: {matched_left.count(False)}", f"Length: {leftlen}")
+    -> 501 +   #print("R:", "".join('T' if x else 'F' for x in matched_right), f"T: {matched_right.count(True)}", f"F: {matched_right.count(False)}", f"Length: {rightlen}")
+    -> 502 +   assert (leftlen - matched_left.count(False)) == total_matched, f"Expected: matched_left.count(True) = {matched_left.count(True)} == {total_matched} = total_matched"
+    -> 503 +   assert (rightlen - matched_right.count(False)) == total_matched, f"Expected: matched_right.count(True) = {matched_right.count(True)} == {total_matched} = total_matched"
+    -> 504 + 
+    -> 505 + 
+    -> 506 + # Compute proper width of line number column.
+-----------\ l0297–l0298 -> r0507–r0508  (1 lines)
+ 297-> 507 | W = 2
+-----------/
+ 298->     - if leftlen > 99 or rightlen > 99:
+    -> 508 + if max(leftlen, rightlen) >= 100:
+-----------\ l0299–l0300 -> r0509–r0510  (1 lines)
+ 299-> 509 |   W = 3
+-----------/
+ 300->     - if leftlen > 999 or rightlen > 999:
+    -> 510 + if max(leftlen, rightlen) >= 1000:
+-----------\ l0301–l0302 -> r0511–r0512  (1 lines)
+ 301-> 511 |   W = 4
+-----------/
+    -> 512 + if max(leftlen, rightlen) >= 10000:
+    -> 513 +   W = 5
+-----------\ l0302–l0303 -> r0514–r0515  (1 lines)
+ 302-> 514 M W += 1[+ +] # workaround around IMHO % 3d bug, TODO(baryluk): Fix it.
+-----------/
+    -> 515 + 
+    -> 516 + # Line prefixes.
+    -> 517 + LL = ""  # Left
+    -> 518 + RR = ""  # Right
+    -> 519 + EE = ""  # Not-present lines.
+-----------\ l0262–l0266 -> r0520–r0524  (4 lines)
+ 262-> 520 | if args.line_prefixes:
+ 263-> 521 |   LL = "l"
+ 264-> 522 |   RR = "r"
+ 265-> 523 |   EE = " "
+-----------/
+    -> 524 + 
+    -> 525 + # Formating of the left column, with line numbers, for:
+    -> 526 + WW = "%s% " + str(W) + "d"  # ?? Some remnant of the past?
+-----------\ l0305–l0307 -> r0527–r0529  (2 lines)
+ 305-> 527 M WL = LL + "% " + str(W) + "d"[+  # Left+]
+ 306-> 528 M WR = RR + "% " + str(W) + "d"[+  # Right+]
+-----------/
+ 307->     - XX = EE + " "*W
+    -> 529 + XX = EE + " "*W  # The other side, when only one is present (i.e. removals from left, or additions to right).
+    -> 530 + 
+    -> 531 + # These things usually will be used in form like this:
+    -> 532 + # WL->WR
+    -> 533 + # WL->XX
+    -> 534 + # XX->WR
+    -> 535 + 
+    -> 536 + 
+    -> 537 + mark_equal, mark_insert, mark_delete, mark_replace = blue, green, red, (lambda l, r: red(l) + green(r))
+    -> 538 + if not args.color:
+    -> 539 +   mark_equal = lambda x: x
+    -> 540 +   mark_insert = lambda x: f"[+{x}+]"
+    -> 541 +   mark_delete = lambda x: f"[-{x}-]"
+    -> 542 +   mark_replace = lambda l, r: mark_delete(l) + mark_insert(r)
+    -> 543 + 
+    -> 544 + # For similar lines, returns a colored or un-colored representation with all the edits on it.
+    -> 545 + def word_diff(l, r):
+    -> 546 +   assert fuzzy, "Internal error: word_diff used, but fuzzy is not set"
+    -> 547 +   if l == r:
+    -> 548 +     return blue(l)
+    -> 549 +   if l[-1] == '\n':
+    -> 550 +     l = l[:-1]
+    -> 551 +   if r[-1] == '\n':
+    -> 552 +     r = r[:-1]
+    -> 553 +   ratio, sequence_matcher = similarity(l, r)
+    -> 554 +   #if __debug__:
+    -> 555 +   #  assert ratio >= fuzzy_threshold, f"Expected: ratio = {ratio} >= {fuzzy_threshold}"
+    -> 556 +   ret = ""
+    -> 557 +   # TODO(baryluk): I am assuming these are essentially sorted.
+    -> 558 +   for opcode_tag, i1, i2, j1, j2 in sequence_matcher.get_opcodes():
+    -> 559 +     if opcode_tag[0] == "e":  # "equal"
+    -> 560 +       # assert l[i1:i2] == r[j1:j2]
+    -> 561 +       ret += mark_equal(l[i1:i2])
+    -> 562 +     elif opcode_tag[0] == "i":  # "insert"
+    -> 563 +       ret += mark_insert(r[j1:j2])
+    -> 564 +     elif opcode_tag[0] == "d":  # "delete"
+    -> 565 +       ret += mark_delete(l[i1:i2])
+    -> 566 +     elif opcode_tag[0] == "r":  # "replace"
+    -> 567 +       ret += mark_replace(l[i1:i2], r[j1:j2])
+    -> 568 +   if debug:
+    -> 569 +     return ret + f" (similarity ratio: {ratio})"
+    -> 570 +   return ret
+    -> 571 + 
+    -> 572 + 
+-----------\ l0309–l0311 -> r0573–r0575  (2 lines)
+ 309-> 573 | # Print common subsequences, intermixing new lines (in natural order),
+ 310-> 574 | # and removed ones (just after end of moved ones).
+-----------/
+    -> 575 + 
+    -> 576 + # Keep track of stats for the use in the summary at the end.
+    -> 577 + lines_moved = 0
+    -> 578 + lines_not_moved = 0
+-----------\ l0286–l0289 -> r0579–r0582  (3 lines)
+ 286-> 579 | left_right_matched = 0
+ 287-> 580 | left_removed = 0
+ 288-> 581 | right_added = 0
+-----------/
+    -> 582 + files_differ = False
+    -> 583 + 
+    -> 584 + # Various '+ 1', are because for human usage, we want lines to start from 1,
+    -> 585 + # but internally we keep lines in lists, which start indexing at 0.
+    -> 586 + # So for display we need to do '+ 1', but for accessing the lists itself,
+    -> 587 + # we do not!
+    -> 588 + 
+-----------\ l0315–l0317 -> r0589–r0591  (2 lines)
+ 315-> 589 | # First print lines removed from left file, before any blocks in right file.
+ 316-> 590 | for i, a in enumerate(left):
+-----------/
+-----------\ l0348–l0349 -> r0591–r0592  (1 lines)
+ 348-> 591 M   if not matched_[-righ-][+lef+]t[[-j-][+i+]]:
+-----------/
+-----------\ l0318–l0320 -> r0592–r0594  (2 lines)
+ 318-> 592 |     left_removed += 1
+ 319-> 593 |     print((WL + "->" + XX + " " + red("- %s")) % (i + 1, a.rstrip()))
+-----------/
+    -> 594 +   else:
+    -> 595 +     break
+    -> 596 + 
+    -> 597 + 
+-----------\ l0323–l0324 -> r0598–r0599  (1 lines)
+ 323-> 598 | # Right centric view.
+-----------/
+-----------\ l0232–l0233 -> r0599–r0600  (1 lines)
+ 232-> 599 M for [-i-][+j+], [-a-][+_b+] in enumerate([-lef-][+righ+]t):
+-----------/
+-----------\ l0326–l0328 -> r0600–r0602  (2 lines)
+ 326-> 600 |   if j in blocks_right:
+ 327-> 601 |     i, k = blocks_right[j]
+-----------/
+    -> 602 +     assert k >= 1
+    -> 603 +     if i != j:
+    -> 604 +       files_differ = True
+    -> 605 +     if args.frames:
+-----------\ l0328–l0329 -> r0606–r0607  (1 lines)
+ 328-> 606 M [+  +]    print("-"*(2 * W + 3) + "\\ l%04d[---][+–+]l%04d -> r%04d[---][+–+]r%04d  (%d lines)" % (i + 1, i + k + 1, j + 1, j + k + 1, k))
+-----------/
+ 329->     -     was_shortened = False
+    -> 607 +     consequtive_equals = 0
+-----------\ l0236–l0237 -> r0608–r0609  (1 lines)
+ 236-> 608 M     kk = [-1-][+0+]
+-----------/
+    -> 609 +     while kk < k:
+    -> 610 +       similarity_ratio = line_similarity(left[i + kk], right[j + kk])
+    -> 611 +       if fuzzy:
+    -> 612 +         assert similarity_ratio >= fuzzy_threshold, f"Expected: left[{i} + {kk}] ~ right[{j} + {kk}], got {pretty(left[i + kk])} != {pretty(right[j + kk])}, Expected: similarity_ratio = {similarity_ratio} >= {fuzzy_threshold}"
+    -> 613 +       else:
+    -> 614 +         assert left[i + kk] == right[j + kk], f"Expected: left[{i} + {kk}] == right[{j} + {kk}], got {pretty(left[i + kk])} != {pretty(right[j + kk])}"
+    -> 615 +         if debug: assert similarity_ratio == 1.0, f"Expected: left[{i} + {kk}] ~== right[{j} + {kk}], got {pretty(left[i + kk])} == {pretty(right[j + kk])}, but similarity_ratio = {similarity_ratio} != 1.0"
+    -> 616 +       if consequtive_equals == 0:
+    -> 617 +         # Count ahead exact equals for fold equal logic.
+    -> 618 +         # The result can still be zero.
+    -> 619 +         while kk + consequtive_equals < k and left[i + kk + consequtive_equals] == right[j + kk + consequtive_equals]:
+    -> 620 +           consequtive_equals += 1
+    -> 621 +       assert kk + consequtive_equals <= k, f"Failed: {kk} + {consequtive_equals} <= {k}"
+    -> 622 +       if consequtive_equals >= args.shorten_long_matches:
+    -> 623 +         left_right_matched += consequtive_equals
+    -> 624 +         if i == j:
+    -> 625 +           lines_not_moved += consequtive_equals
+    -> 626 +         else:
+    -> 627 +           lines_moved += consequtive_equals
+    -> 628 +         # Due to fuzzy matching, we might have long matching block,
+    -> 629 +         # but it doesn't mean all lines are exactly equal.
+    -> 630 +         assert left[i + kk] == right[j + kk]
+-----------\ l0334–l0335 -> r0631–r0632  (1 lines)
+ 334-> 631 M         print((WL + "->" + WR + " " + blue("[-%s-][+|+] %s")) % (i + kk + 1, j + kk + 1, [-c, -][+remove_nl(+]left[i + kk][-.rstrip(-])))
+-----------/
+-----------\ l0283–l0284 -> r0632–r0633  (1 lines)
+ 283-> 632 M         k[+k+] += 1
+-----------/
+    -> 633 +         skipped_count = consequtive_equals - 2
+    -> 634 +         assert skipped_count >= 5
+    -> 635 +         #assert k - args.shorten_long_matches + 3 > 3, f"It is silly to shorten {k - args.shorten_long_matches + 1} lines, to... 3 lines."
+-----------\ l0338–l0339 -> r0636–r0637  (1 lines)
+ 338-> 636 |         print(" " + "."*(W - 1) + "->" + " " + "."*(W - 1) + " " + blue(":"))
+-----------/
+ 339->     -         print(" (%d lines skiped)" % (k-args.shorten_long_matches + 1,))
+    -> 637 +         print(f" ({skipped_count} lines skipped)")
+-----------\ l0340–l0341 -> r0638–r0639  (1 lines)
+ 340-> 638 |         print(" " + "."*(W - 1) + "->" + " " + "."*(W - 1) + " " + blue(":"))
+-----------/
+ 341->     -         was_shortened = True
+    -> 639 +         kk += skipped_count
+    -> 640 +         assert kk < k
+    -> 641 +         assert left[i + kk] == right[j + kk]
+    -> 642 +         print((WL + "->" + WR + " " + blue("| %s")) % (i + kk + 1, j + kk + 1, remove_nl(left[i + kk])))
+-----------\ l0347–l0348 -> r0643–r0644  (1 lines)
+ 347-> 643 M       [-i-][+  kk+] += 1
+-----------/
+    -> 644 +         consequtive_equals = 0
+    -> 645 +       else:
+-----------\ l0331–l0332 -> r0646–r0647  (1 lines)
+ 331-> 646 M [+  +]      left_right_matched += 1
+-----------/
+ 332->     -       c = "|"
+ 333->     -       if kk < args.shorten_long_matches / 2 or kk > (k - args.shorten_long_matches / 2):
+    -> 647 +         if i != j:
+    -> 648 +            lines_moved += 1
+    -> 649 +         else:
+    -> 650 +            lines_not_moved += 1
+    -> 651 +         if fuzzy and left[i + kk] != right[j + kk]:
+    -> 652 +           assert consequtive_equals == 0
+    -> 653 +           consequtive_equals = 0
+    -> 654 +           files_differ = True
+    -> 655 +           print((WL + "->" + WR + " " + yellow("M") + " %s") % (i + kk + 1, j + kk + 1, remove_nl(word_diff(left[i + kk], right[j + kk]))))
+    -> 656 +         else:
+    -> 657 +           assert left[i + kk] == right[j + kk]
+    -> 658 +           print((WL + "->" + WR + " " + blue("| %s")) % (i + kk + 1, j + kk + 1, remove_nl(left[i + kk])))
+    -> 659 +           consequtive_equals -= 1
+    -> 660 +           assert consequtive_equals >= 0
+    -> 661 +         kk += 1
+    -> 662 +     if args.frames:
+-----------\ l0342–l0346 -> r0663–r0667  (4 lines)
+ 342-> 663 M [+  +]    print("-"*(2 * W + 3) + "/")
+ 343-> 664 |     i = i + k
+ 344-> 665 |     while i < leftlen and not matched_left[i]:
+ 345-> 666 |       left_removed += 1
+-----------/
+    -> 667 +       files_differ = True
+-----------\ l0346–l0347 -> r0668–r0669  (1 lines)
+ 346-> 668 |       print((WL + "->" + XX + " " + red("- %s")) % (i + 1, left[i].rstrip()))
+-----------/
+-----------\ l0279–l0280 -> r0669–r0670  (1 lines)
+ 279-> 669 M       [-k-][+i+] [+++]= [-0-][+1+]
+-----------/
+-----------\ l0363–l0364 -> r0670–r0671  (1 lines)
+ 363-> 670 M [-  -]  if not matched_right[j]:
+-----------/
+    -> 671 +     assert not j in blocks_right
+-----------\ l0349–l0350 -> r0672–r0673  (1 lines)
+ 349-> 672 |     right_added += 1
+-----------/
+    -> 673 +     files_differ = True
+-----------\ l0350–l0351 -> r0674–r0675  (1 lines)
+ 350-> 674 |     print((XX + "->" + WR + " " + green("+ %s")) % (j + 1, _b.rstrip()))
+-----------/
+    -> 675 + 
+-----------\ l0352–l0355 -> r0676–r0679  (3 lines)
+ 352-> 676 | if args.summary_left:
+ 353-> 677 |   print(red("Removed") + " from left file:")
+ 354-> 678 M   for i, [-_-]a in enumerate(left):
+-----------/
+    -> 679 +     if not matched_left[i]:
+-----------\ l0356–l0357 -> r0680–r0681  (1 lines)
+ 356-> 680 |       if i > 0 and matched_left[i - 1]:
+-----------/
+    -> 681 +         if args.frames:
+-----------\ l0357–l0359 -> r0682–r0684  (2 lines)
+ 357-> 682 M [+  +]        print("-----")
+ 358-> 683 M       print((WL + "->" + XX + " " + red("- %s")) % (i + 1, [-_-]a.rstrip()))
+-----------/
+    -> 684 + 
+-----------\ l0360–l0363 -> r0685–r0688  (3 lines)
+ 360-> 685 | if args.summary_right:
+ 361-> 686 M   print(green("Added") + " to right file[+:+]")
+ 362-> 687 M   for j, [-_-]b in enumerate(right):
+-----------/
+    -> 688 +     if not matched_right[j]:
+-----------\ l0364–l0365 -> r0689–r0690  (1 lines)
+ 364-> 689 |       if i > 0 and matched_right[j - 1]:
+-----------/
+    -> 690 +         if args.frames:
+-----------\ l0365–l0367 -> r0691–r0693  (2 lines)
+ 365-> 691 M [+  +]        print("-----")
+ 366-> 692 M       print((XX + "->" + WR + " " + green("+ %s")) % (j + 1, [-_-]b.rstrip()))
+-----------/
+    -> 693 + 
+-----------\ l0368–l0377 -> r0694–r0703  (9 lines)
+ 368-> 694 | if args.summary_stats:
+ 369-> 695 |   print()
+ 370-> 696 |   print(ansi.WARNING + "Diff statistics:")
+ 371-> 697 M   print([+f+]"\tInitial context length used:[-",-] [+{+]args.initial_context_matching[+}"+])
+ 372-> 698 M   print([+f+]"\tNumber of matching (extended) blocks:[-",-] [+{+]len(blocks_right)[+}"+])
+ 373-> 699 |   # sum(map(lambda x: x[1], blocks_right.itervalues()))
+ 374-> 700 M   print([+f+]"\tNumber of lines in matching (extended) blocks:[-",-] [+{+]left_right_matched[+}"+])
+ 375-> 701 M   print([+f+]"\tNumber of lines removed from left file:[-",-] [+{+]left_removed[+}"+])
+ 376-> 702 M   print([+f+]"\tNumber of new lines added to right file:[-",-] [+{+]right_added[+}"+])
+-----------/
+    -> 703 +   if debug:
+    -> 704 +     print(f"\tNumber of lines moved (exact and fuzzy): {lines_moved}")
+    -> 705 +     print(f"\tNumber of lines not moved (exact and fuzzy): {lines_not_moved}")
+-----------\ l0377–l0378 -> r0706–r0707  (1 lines)
+ 377-> 706 M   print([-(-][+f+]"\tWeighted cost (blocks + removed + added): [-%s" + ansi.ENDC) % (-][+{+]len(blocks_right) - 1 + left_removed + right_added[-,-][+}" + ansi.ENDC+])[-)-]
+-----------/
+    -> 707 + 
+    -> 708 + if files_differ:
+    -> 709 +   if args.git:
+    -> 710 +     if args.header:
+    -> 711 +       print()  # Separate more, if there is a header.
+    -> 712 +     print()  # Extra line, to separate multiple diffs for separate file pairs.
+    -> 713 +     sys.exit(0)
+    -> 714 +   sys.exit(1)
+    -> 715 + 
+    -> 716 + if args.skip_equal:
+    -> 717 +   assert False, "Should not reach this point"
+    -> 718 + 
+    -> 719 + sys.exit(0)
+
+Diff statistics:
+	Initial context length used: 3
+	Number of matching (extended) blocks: 160
+	Number of lines in matching (extended) blocks: 339
+	Number of lines removed from left file: 39
+	Number of new lines added to right file: 380
+	Weighted cost (blocks + removed + added): 578

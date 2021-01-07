@@ -1,0 +1,29 @@
+Removals from left file, moves and additions to right file:
+--- tests/fuzzy_1/left
++++ tests/fuzzy_1/right
+---------\ l0001–l0017 -> r0001–r0017  (16 lines)
+  1->  1 | # Long ones are trimmed.
+  2->  2 | assert(long_immediate_re.sub(long_immediate_replacer, '12361233') == '12361233')
+  3->  3 | assert(long_immediate_re.sub(long_immediate_replacer, '123612') == '111111')
+  4->  4 M assert(long_immediate_re.[-sub-][+replace+](long_immediate_replacer, '123') == '111')
+  5->  5 | assert(long_immediate_re.sub(long_immediate_replacer, '42') == '11')
+  6->  6 M assert(long_immediate_re.sub(long_immediate_replacer, '0x5ef123') == '0x??????[+?+]')
+  7->  7 | assert(long_immediate_re.sub(long_immediate_replacer, '0x5ef') == '0x???')
+  8->  8 | assert(long_immediate_re.sub(long_immediate_replacer, '-23') == '-23')
+  9->  9 M [-#-]assert(long_immediate_re.sub(long_immediate_replacer, '-0x21') == '-0x21')
+ 10-> 10 M [+#+]assert(long_immediate_re.sub(long_immediate_replacer, '-0x21') == '-0x??')
+ 11-> 11 M [-#-]assert(long_immediate_re.sub(long_immediate_replacer, '$0x20000002b') == '$0x20000002b')
+ 12-> 12 M [+#+]assert(long_immediate_re.sub(long_immediate_replacer, '$0x20000002b') == '$0x?????????')
+ 13-> 13 M [-#-]assert(long_immediate_re.sub(long_immediate_replacer, '$0x3f3f3f3f3f3f3f3f') == '$0x3f3f3f3f3f3f3f3f')
+ 14-> 14 | assert(long_immediate_re.sub(long_immediate_replacer, '$0x3f3f3f3f3f3f3f3f') == '$0x????????????????')
+ 15-> 15 | #assert(long_immediate_re.sub(long_immediate_replacer, '*0xcf2b') == '*0xcf2b')
+ 16-> 16 | assert(long_immediate_re.sub(long_immediate_replacer, '*0xcf2b') == '*0x????')
+---------/
+
+Diff statistics:
+	Initial context length used: 3
+	Number of matching (extended) blocks: 1
+	Number of lines in matching (extended) blocks: 16
+	Number of lines removed from left file: 0
+	Number of new lines added to right file: 0
+	Weighted cost (blocks + removed + added): 0

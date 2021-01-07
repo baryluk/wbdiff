@@ -1,14 +1,14 @@
 Removals from left file, moves and additions to right file:
 --- tests/11/left
 +++ tests/11/right
----------\ l0001-l0004 -> r0001-r0004  (3 lines)
+---------\ l0001–l0004 -> r0001–r0004  (3 lines)
   1->  1 | a
   2->  2 | b
   3->  3 | c
 ---------/
    ->  4 + A
    ->  5 + B
----------\ l0004-l0015 -> r0006-r0017  (11 lines)
+---------\ l0004–l0015 -> r0006–r0017  (11 lines)
   4->  6 | d
   5->  7 | e
   6->  8 | f
