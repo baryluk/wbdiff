@@ -1,0 +1,53 @@
+Removals from left file, moves and additions to right file:
+--- tests/fuzzy_demo/left
++++ tests/fuzzy_demo/right
+---------\ l0015–l0016 -> r0001–r0002  (1 lines)
+ 15->  1 | CHAPTER I.
+---------/
+ 16->    - Down the Fox-Hole
+ 17->    - 
+   ->  2 + Down the Rabbit-Hole
+---------\ l0005–l0006 -> r0003–r0004  (1 lines)
+  5->  3 | 
+---------/
+---------\ l0011–l0012 -> r0004–r0005  (1 lines)
+ 11->  4 | 
+---------/
+ 12->    - Hmm.
+---------\ l0006–l0011 -> r0005–r0010  (5 lines)
+  6->  5 M [-Bob-][+Alice+] was beginning to get very tired of sitting by h[+er s+]is[- bro-]t[-h-]er on the
+  7->  6 M bank, and of having nothing to do: once or twice [+s+]he had peeped into
+  8->  7 M the book h[+er s+]is[- bro-]t[-h-]er was reading, but it had no pictures or
+  9->  8 M conversations in it, “and what is the use of a book,” thought [-Bob-][+Alice+]
+ 10->  9 | “without pictures or conversations?”
+---------/
+---------\ l0013–l0014 -> r0010–r0011  (1 lines)
+ 13-> 10 | 
+---------/
+---------\ l0001–l0002 -> r0011–r0012  (1 lines)
+  1-> 11 M So [+s+]he was considering in h[-is-][+er+] own mind (as well as she could, for the
+---------/
+   -> 12 + hot day made her feel very sleepy and stupid), whether the pleasure of
+---------\ l0002–l0005 -> r0013–r0016  (3 lines)
+  2-> 13 | making a daisy-chain would be worth the trouble of getting up and
+  3-> 14 M picking the daisies, when suddenly a White [-Fox-][+Rabbit+] with [-red-][+pink+] eyes ran
+  4-> 15 M close by h[-im-][+er+].
+---------/
+---------\ l0014–l0015 -> r0016–r0017  (1 lines)
+ 14-> 16 | 
+---------/
+---------\ l0018–l0049 -> r0017–r0048  (31 lines)
+ 18-> 17 | There was nothing so _very_ remarkable in that; nor did Alice think it
+ ..-> .. :
+ (29 lines skipped)
+ ..-> .. :
+ 48-> 47 | cupboards as she fell past it.
+---------/
+
+Diff statistics:
+	Initial context length used: 3
+	Number of matching (extended) blocks: 9
+	Number of lines in matching (extended) blocks: 45
+	Number of lines removed from left file: 3
+	Number of new lines added to right file: 2
+	Weighted cost (blocks + removed + added): 13

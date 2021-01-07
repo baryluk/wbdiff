@@ -55,6 +55,10 @@ Or in colors:
 
 ![](screenshot.png)
 
+Please notice, the line number in the left most column, and how `wbdiff` maps
+them to the right column, detecting block moves, additions, removals, while some
+blocks have minor edits in them.
+
 ## Features:
 
   - Detection of moved code blocks
@@ -67,6 +71,7 @@ Or in colors:
   - Ability to ignore certain types of changes
   - Normalization of lines
   - Diff algorithm and output tunable using command line options
+  - `git` integration support
   - Tested by more than dozen of unittests
   - Slowness
 
