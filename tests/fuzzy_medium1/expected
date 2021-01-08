@@ -1,0 +1,254 @@
+Removals from left file, moves and additions to right file:
+--- tests/fuzzy_medium1/left
++++ tests/fuzzy_medium1/right
+-----------\ l0001–l0081 -> r0001–r0081  (80 lines)
+   1->   1 | #!/usr/bin/env python3
+ ...-> ... :
+ (78 lines skipped)
+ ...-> ... :
+  80->  80 | 
+-----------/
+  81->     - line_re = re.compile(r'^ *[0-9a-f]+:\t *([0-9a-f][0-9a-f] )+ *\t([a-z][a-z0-9% \(\),\*\$:\-]*) *(<[^>]+>)?(?: *|#.*)$')
+    ->  81 + line_re = re.compile(r'^ *[0-9a-f]+:\t *(?:[0-9a-f][0-9a-f] )+ *\t((?:(?:data16(?: data16)*|rep|repe|repz|repne|repnz|lock) )?[a-z0-9]+)( +[a-z0-9% \(\),\*\$:\-]*)? *(?:<[^>]+>)?(?: *|#.*)$')
+-----------\ l0082–l0085 -> r0082–r0085  (3 lines)
+  82->  82 | assert(line_re.match('   166f8:\tc3                   \tretq'))
+  83->  83 | assert(line_re.match('   18161:	41 ff 14 df          	callq  *(%r15,%rbx,8)'))
+  84->  84 | 
+-----------/
+-----------\ l0087–l0088 -> r0085–r0086  (1 lines)
+  87->  85 | def test_op(instruction, expected):
+-----------/
+  88->     -   m = opcode_re.match(instruction)
+    ->  86 +   m = line_re.match("   166f8:\tc3                   \t" + instruction)
+-----------\ l0089–l0106 -> r0087–r0104  (17 lines)
+  89->  87 |   assert m, "f{instruction} didn't match opcode at all"
+ ...-> ... :
+ (15 lines skipped)
+ ...-> ... :
+ 105-> 103 | opcodes = collections.defaultdict(int)
+-----------/
+    -> 104 + # This are both registers, and immediates.
+    -> 105 + # Immediates are converted to canonical form, i.e. 0xea13 is converted to 0x????
+    -> 106 + # This is to reduce the noise, and make more meaningful list, but still giving
+    -> 107 + # little bit of insight about the size of immediates.
+-----------\ l0106–l0107 -> r0108–r0109  (1 lines)
+ 106-> 108 | registers = collections.defaultdict(int)
+-----------/
+    -> 109 + # This is list of canonical forms for immediates, mapped to a count
+    -> 110 + # of non-canonical forms, i.e. '0x????': {'0xea13': 5, '0xffff': 9, ...}
+    -> 111 + # This can be pretty big in size.
+    -> 112 + registers_full = collections.defaultdict(lambda: collections.defaultdict(int))
+-----------\ l0085–l0086 -> r0113–r0114  (1 lines)
+  85-> 113 | 
+-----------/
+  86->     - opcode_re = re.compile(r'^((?:(?:data16(?: data16)*|rep|repe|repz|repne|repnz|lock) )?[a-z0-9]+)(?: .*|)$')
+-----------\ l0108–l0110 -> r0114–r0116  (2 lines)
+ 108-> 114 | total_instruction_count = 0
+ 109-> 115 | 
+-----------/
+ 110->     - def register_replacer(m):
+    -> 116 + def long_immediate_replacer(m):
+    -> 117 +   full = m.group(1)
+    -> 118 +   # We use the fact that the string is at least 2 characters.
+    -> 119 +   if full[1] == 'x':
+    -> 120 +     return '0x' + '?'*(len(m.group(1))-2)
+-----------\ l0157–l0158 -> r0121–r0122  (1 lines)
+ 157-> 121 M [+  +]else:
+-----------/
+-----------\ l0111–l0115 -> r0122–r0126  (4 lines)
+ 111-> 122 M [+  +]  return '1'*len(m.group([-0-][+1+]))
+ 112-> 123 | 
+ 113-> 124 | tr_table = "".maketrans("(),", "   ")
+ 114-> 125 | 
+-----------/
+    -> 126 + long_immediate_re = re.compile(r'(^[0-9a-f]{2,7}$|0x[0-9a-f][0-9a-f]+)')
+-----------\ l0107–l0108 -> r0127–r0128  (1 lines)
+ 107-> 127 | 
+-----------/
+    -> 128 + # Non-numeric stuff is left untouched.
+    -> 129 + assert(long_immediate_re.sub(long_immediate_replacer, 'st') == 'st')
+    -> 130 + assert(long_immediate_re.sub(long_immediate_replacer, '%eax') == '%eax')
+-----------\ l0129–l0130 -> r0131–r0132  (1 lines)
+ 129-> 131 | 
+-----------/
+    -> 132 + # Long ones are trimmed.
+    -> 133 + assert(long_immediate_re.sub(long_immediate_replacer, '12361233') == '12361233')
+    -> 134 + assert(long_immediate_re.sub(long_immediate_replacer, '123612') == '111111')
+    -> 135 + assert(long_immediate_re.sub(long_immediate_replacer, '123') == '111')
+    -> 136 + assert(long_immediate_re.sub(long_immediate_replacer, '42') == '11')
+    -> 137 + assert(long_immediate_re.sub(long_immediate_replacer, '0x5ef123') == '0x??????')
+    -> 138 + assert(long_immediate_re.sub(long_immediate_replacer, '0x5ef') == '0x???')
+    -> 139 + assert(long_immediate_re.sub(long_immediate_replacer, '-23') == '-23')
+    -> 140 + #assert(long_immediate_re.sub(long_immediate_replacer, '-0x21') == '-0x21')
+    -> 141 + assert(long_immediate_re.sub(long_immediate_replacer, '-0x21') == '-0x??')
+    -> 142 + #assert(long_immediate_re.sub(long_immediate_replacer, '$0x20000002b') == '$0x20000002b')
+    -> 143 + assert(long_immediate_re.sub(long_immediate_replacer, '$0x20000002b') == '$0x?????????')
+    -> 144 + #assert(long_immediate_re.sub(long_immediate_replacer, '$0x3f3f3f3f3f3f3f3f') == '$0x3f3f3f3f3f3f3f3f')
+    -> 145 + assert(long_immediate_re.sub(long_immediate_replacer, '$0x3f3f3f3f3f3f3f3f') == '$0x????????????????')
+    -> 146 + #assert(long_immediate_re.sub(long_immediate_replacer, '*0xcf2b') == '*0xcf2b')
+    -> 147 + assert(long_immediate_re.sub(long_immediate_replacer, '*0xcf2b') == '*0x????')
+-----------\ l0130–l0131 -> r0148–r0149  (1 lines)
+ 130-> 148 | 
+-----------/
+ 131->     -     # opcodes[opcode] += 1
+ 132->     -     opcode = opcode_re.match(instruction)
+ 133->     -     if not opcode:
+ 134->     -       print(f'Warning: Unrecognized instruction format: {instruction}. Please report a bug.', file=sys.stderr)
+ 135->     -       continue
+ 136->     -     opcode = opcode[1]
+ 137->     -     assert instruction.startswith(opcode)
+ 138->     -     opcodes[opcode] += 1
+    -> 149 + # Short ones are untouched.
+    -> 150 + assert(long_immediate_re.sub(long_immediate_replacer, '5') == '5')
+    -> 151 + assert(long_immediate_re.sub(long_immediate_replacer, '8') == '8')
+    -> 152 + assert(long_immediate_re.sub(long_immediate_replacer, '0') == '0')
+    -> 153 + assert(long_immediate_re.sub(long_immediate_replacer, '0x1') == '0x1')
+    -> 154 + assert(long_immediate_re.sub(long_immediate_replacer, '%cs:0x0') == '%cs:0x0')
+-----------\ l0140–l0141 -> r0155–r0156  (1 lines)
+ 140-> 155 | 
+-----------/
+ 141->     -     arguments = instruction[len(opcode):].lstrip()
+-----------\ l0149–l0150 -> r0156–r0157  (1 lines)
+ 149-> 156 | 
+-----------/
+-----------\ l0115–l0117 -> r0157–r0159  (2 lines)
+ 115-> 157 | def process_data(f):
+ 116-> 158 M   global[- instructions,-] opcodes, registers, total_instruction_count
+-----------/
+ 117->     -   global line_re, opcode_re
+    -> 159 +   global line_re
+-----------\ l0118–l0125 -> r0160–r0167  (7 lines)
+ 118-> 160 |   for line in f:
+ 119-> 161 |     # line = line.rstrip()
+ 120-> 162 |     m = line_re.match(line)
+ 121-> 163 |     if not m:
+ 122-> 164 |       # Debugging unmatched lines.
+ 123-> 165 |       # print(line)
+ 124-> 166 |       continue
+-----------/
+ 125->     -     instruction = m.group(2).strip()  # including immediates, registers, flags, etc.
+ 126->     -     # Disable this by default, as it consumes memory quite a lot.
+ 127->     -     # instructions[instruction] += 1
+ 128->     -     instruction = re.sub(r'0x[0-9a-f]+', "0x???", instruction)
+    -> 167 +     opcodes[m.group(1)] += 1
+-----------\ l0139–l0140 -> r0168–r0169  (1 lines)
+ 139-> 168 |     total_instruction_count += 1
+-----------/
+-----------\ l0152–l0153 -> r0169–r0170  (1 lines)
+ 152-> 169 | 
+-----------/
+    -> 170 +     arguments = m.group(2)
+    -> 171 +     if arguments:
+-----------\ l0142–l0144 -> r0172–r0174  (2 lines)
+ 142-> 172 M [+  +]    arguments = arguments.translate(tr_table)
+ 143-> 173 M [+  +]    for register in arguments.split():
+-----------/
+ 144->     -       register = re.sub(r'^[0-9a-f]{2,7}$', register_replacer, register)
+ 145->     -       if register == "*":
+    -> 174 +         canonical_register = long_immediate_re.sub(long_immediate_replacer, register)
+-----------\ l0148–l0149 -> r0175–r0176  (1 lines)
+ 148-> 175 M [+  +]      registers[[+canonical_+]register] += 1
+-----------/
+    -> 176 +         if canonical_register != register:
+    -> 177 +           registers_full[canonical_register][register] += 1
+-----------\ l0159–l0160 -> r0178–r0179  (1 lines)
+ 159-> 178 | 
+-----------/
+    -> 179 +   # We do this outside of the main loop, as these happen
+    -> 180 +   # infrequently, and having simpler loop probably speeds
+    -> 181 +   # things up.
+-----------\ l0146–l0147 -> r0182–r0183  (1 lines)
+ 146-> 182 M [-       -]  # From things like "callq  *(%r15,%rbx,8)", this is because we break on (, and "*" become loose.
+-----------/
+ 147->     -          continue
+    -> 183 +   if "*" in registers:
+    -> 184 +     del registers["*"]
+-----------\ l0162–l0163 -> r0185–r0186  (1 lines)
+ 162-> 185 | 
+-----------/
+-----------\ l0150–l0152 -> r0186–r0188  (2 lines)
+ 150-> 186 | import sys
+ 151-> 187 | import subprocess
+-----------/
+-----------\ l0163–l0164 -> r0188–r0189  (1 lines)
+ 163-> 188 | 
+-----------/
+ 164->     - def print_stats(d:dict):
+-----------\ l0153–l0157 -> r0189–r0193  (4 lines)
+ 153-> 189 | if sys.argv[1:]:
+ 154-> 190 |   for filename in sys.argv[1:]:
+ 155-> 191 |     with subprocess.Popen(['objdump', '-d', filename], stdout=subprocess.PIPE, encoding='utf-8') as proc:
+ 156-> 192 |       process_data(proc.stdout)
+-----------/
+    -> 193 + else:
+-----------\ l0158–l0159 -> r0194–r0195  (1 lines)
+ 158-> 194 |   process_data(sys.stdin)
+-----------/
+-----------\ l0171–l0172 -> r0195–r0196  (1 lines)
+ 171-> 195 | 
+-----------/
+-----------\ l0160–l0162 -> r0196–r0198  (2 lines)
+ 160-> 196 | # For debugging what is not captured yet by regexp.
+ 161-> 197 | # print(total_instruction_count)
+-----------/
+-----------\ l0174–l0176 -> r0198–r0200  (2 lines)
+ 174-> 198 | 
+ 175-> 199 | 
+-----------/
+    -> 200 + def print_stats(d:dict, d2:dict=None):
+    -> 201 +   """Print dict(int) d, in a sorted manner, with highest ones first,
+    -> 202 +   and count column having constant width.
+-----------\ l0178–l0179 -> r0203–r0204  (1 lines)
+ 178-> 203 | 
+-----------/
+    -> 204 +   Additionally, if d2 is presnet, which should be dict(dict(int)),
+    -> 205 +   check keys in it, and if present, display top values from this
+    -> 206 +   dict in a sorted manner."""
+-----------\ l0165–l0170 -> r0207–r0212  (5 lines)
+ 165-> 207 |   width = None
+ 166-> 208 |   for k in sorted(d, key=lambda k: d[k], reverse=True):
+ 167-> 209 |     v = d[k]
+ 168-> 210 |     if not width:
+ 169-> 211 |       width = len(str(v))
+-----------/
+ 170->     -     print(f"{v:{width}}", k)
+    -> 212 +     suffix = ""
+    -> 213 +     if d2:
+    -> 214 +       if k in d2:
+    -> 215 +         d3 = d2[k]
+    -> 216 +         top = ""
+    -> 217 +         for k3 in sorted(d3, key=lambda k3: d3[k3], reverse=True):
+    -> 218 +           if top:
+    -> 219 +             top += ", "
+    -> 220 +           if len(top) > 90:
+    -> 221 +             top += "…"
+    -> 222 +             break
+    -> 223 +           top += f"{d3[k3]}× {k3}"
+    -> 224 +         suffix += f" ({len(d3)} unique. Top: {top})"
+    -> 225 +     print(f"{v:{width}} {k}{suffix}")
+    -> 226 + 
+-----------\ l0172–l0174 -> r0227–r0229  (2 lines)
+ 172-> 227 | # print("Instruction statistics:")
+ 173-> 228 | # print_stats(instructions)
+-----------/
+    -> 229 + 
+    -> 230 + 
+-----------\ l0176–l0178 -> r0231–r0233  (2 lines)
+ 176-> 231 | print("Opcode statistics:")
+ 177-> 232 | print_stats(opcodes)
+-----------/
+    -> 233 + 
+-----------\ l0179–l0181 -> r0234–r0236  (2 lines)
+ 179-> 234 | print()
+ 180-> 235 | print("Register and other opcode arguments statistics in general (source and destination):")
+-----------/
+ 181->     - print_stats(registers)
+    -> 236 + print_stats(registers, registers_full)
+
+Diff statistics:
+	Initial context length used: 3
+	Number of matching (extended) blocks: 35
+	Number of lines in matching (extended) blocks: 157
+	Number of lines removed from left file: 24
+	Number of new lines added to right file: 79
+	Weighted cost (blocks + removed + added): 137
