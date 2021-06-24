@@ -277,12 +277,12 @@ import re
 
 def compile_replacments():
   compiled_replacments = {}
-  for n, from_to in replacments.iteritems():
+  for n, from_to in replacments.items():
     compiled_replacments[n] = re.compile(from_to[0]) #, flags=re.IGNORECASE
   return compiled_replacments
 
 def apply_replacements_line(compiled_replacments, line):
-  for n, from_to in replacments.iteritems():
+  for n, from_to in replacments.items():
     line = compiled_replacments[n].sub(from_to[1], line)
   return line
 
@@ -295,6 +295,7 @@ if args.use_default_replacments:
   compiled_replacments = compile_replacments()
   left = apply_replacements(compiled_replacments, left)
   right = apply_replacements(compiled_replacments, right)
+  # TODO(baryluk): Keep original left and right (especially right), for display purposes.
 
 # In loops below:
 #  * i index is used for left file.
